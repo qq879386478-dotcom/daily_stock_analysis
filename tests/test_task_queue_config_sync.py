@@ -109,6 +109,31 @@ class TaskQueueConfigSyncTestCase(unittest.TestCase):
         self.assertIs(synced, queue)
         self.assertEqual(synced.max_workers, 3)
 
+    def test_submit_background_task_carries_plugin_metadata(self) -> None:
+        queue = AnalysisTaskQueue(max_workers=1)
+
+        class ExecutorStub:
+            def submit(self, func, *args):
+                return SimpleNamespace(cancel=lambda: False)
+
+        queue._executor = ExecutorStub()
+
+        task = queue.submit_background_task(
+            lambda: {"ok": True},
+            stock_code="dsa.analyze_stock",
+            task_type="plugin",
+            action_id="dsa.analyze_stock",
+            subject="600519",
+        )
+
+        payload = task.to_dict()
+        self.assertEqual(task.task_type, "plugin")
+        self.assertEqual(task.action_id, "dsa.analyze_stock")
+        self.assertEqual(task.subject, "600519")
+        self.assertEqual(payload["task_type"], "plugin")
+        self.assertEqual(payload["action_id"], "dsa.analyze_stock")
+        self.assertEqual(payload["subject"], "600519")
+
 
 if __name__ == "__main__":
     unittest.main()

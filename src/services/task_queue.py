@@ -71,6 +71,9 @@ class TaskInfo:
     completed_at: Optional[datetime] = None
     original_query: Optional[str] = None
     selection_source: Optional[str] = None
+    task_type: str = "analysis"
+    action_id: Optional[str] = None
+    subject: Optional[str] = None
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert task info into an API-friendly dictionary."""
@@ -88,6 +91,9 @@ class TaskInfo:
             "error": self.error,
             "original_query": self.original_query,
             "selection_source": self.selection_source,
+            "task_type": self.task_type,
+            "action_id": self.action_id,
+            "subject": self.subject,
         }
     
     def copy(self) -> 'TaskInfo':
@@ -107,6 +113,9 @@ class TaskInfo:
             completed_at=self.completed_at,
             original_query=self.original_query,
             selection_source=self.selection_source,
+            task_type=self.task_type,
+            action_id=self.action_id,
+            subject=self.subject,
         )
 
 
@@ -418,6 +427,9 @@ class AnalysisTaskQueue:
         stock_name: Optional[str] = None,
         report_type: str = "detailed",
         message: Optional[str] = "任务已加入队列",
+        task_type: str = "background",
+        action_id: Optional[str] = None,
+        subject: Optional[str] = None,
     ) -> TaskInfo:
         """
         Submit a generic background callable with task lifecycle tracking.
@@ -433,6 +445,9 @@ class AnalysisTaskQueue:
             status=TaskStatus.PENDING,
             message=message,
             report_type=report_type,
+            task_type=task_type,
+            action_id=action_id,
+            subject=subject,
         )
 
         with self._data_lock:

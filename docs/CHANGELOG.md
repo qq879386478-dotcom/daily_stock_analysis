@@ -49,6 +49,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - [文档] Issue #1279 外部响应兼容补证据：本次修复以 `litellm>=1.80.10,!=1.82.7,!=1.82.8,<2.0.0` 为运行时前提，交叉参照 [LiteLLM OpenAI-compatible](https://docs.litellm.ai/docs/providers/openai_compatible) / [OpenAI Chat Completion API](https://platform.openai.com/docs/api-reference/chat)、并以 `tests/test_market_analyzer_generate_text.py` 的 `content_blocks` 与 `list content` 回归样例为复现依据，保留 `message.content` 回退逻辑避免兼容断层。
 - [改进] 大盘复盘新增 `MARKET_REVIEW_COLOR_SCHEME` 配置，可在指数涨跌幅中选择绿涨红跌或红涨绿跌。
 - [文档] 明确 `MARKET_REVIEW_COLOR_SCHEME` 仅为大盘复盘展示配置，枚举为 `green_up`/`red_up`（默认 `green_up`），属于文案与颜色语义层面变更；本次未调整模型名、provider、Base URL、LLM 运行时迁移或运行时清理逻辑。
+- [新功能] 新增金融 Extension Runtime MVP，定义 ActionContext/ActionResult 契约、权限/超时/调用深度守卫、内置 DSA Action 声明和异步任务桥接。
+- [文档] 新增 Extension Runtime 架构文档，收敛 Plugin、Skill、Action、Contribution、Evidence Store 与 AlphaSift 后续接入边界。
 
 ## [3.16.0] - 2026-05-10
 
