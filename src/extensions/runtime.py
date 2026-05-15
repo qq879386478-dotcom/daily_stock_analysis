@@ -174,7 +174,7 @@ class ExtensionRuntime:
         plugin_failure = self._check_plugin_status(action, run_id, input_hash)
         if plugin_failure is not None:
             return plugin_failure
-        input_failure = self._validate_required_input(action, payload, run_id, input_hash)
+        input_failure = self._validate_input_schema(action, payload, run_id, input_hash)
         if input_failure is not None:
             return input_failure
         try:
@@ -205,27 +205,82 @@ class ExtensionRuntime:
             )
         return None
 
-    def _validate_required_input(self, action, payload, run_id, input_hash):
+    def _validate_input_schema(self, action, payload, run_id, input_hash):
         schema = action.input_schema if isinstance(action.input_schema, dict) else {}
         required = schema.get("required") or []
         if not isinstance(required, (list, tuple)):
-            return None
+            required = []
         missing = []
         for field in required:
             key = str(field)
             value = payload.get(key)
             if key not in payload or value is None or (isinstance(value, str) and not value.strip()):
                 missing.append(key)
-        if not missing:
+        if missing:
+            return self._failure(
+                action.action_id,
+                run_id,
+                "invalid_input",
+                "Action input is missing required fields.",
+                input_hash,
+                {"missing_fields": missing},
+            )
+
+        properties = schema.get("properties") or {}
+        if not isinstance(properties, dict):
+            return None
+        field_errors = {}
+        for field, field_schema in properties.items():
+            key = str(field)
+            if key not in payload or payload.get(key) is None or not isinstance(field_schema, dict):
+                continue
+            expected_type = field_schema.get("type")
+            if expected_type and not self._matches_json_type(payload.get(key), expected_type):
+                field_errors[key] = f"must be {self._json_type_label(expected_type)}"
+        if not field_errors:
             return None
         return self._failure(
             action.action_id,
             run_id,
             "invalid_input",
-            "Action input is missing required fields.",
+            "Action input contains invalid fields.",
             input_hash,
-            {"missing_fields": missing},
+            {"field_errors": field_errors},
         )
+
+    @classmethod
+    def _matches_json_type(cls, value, expected_type):
+        if isinstance(expected_type, (list, tuple)):
+            return any(cls._matches_json_type(value, item) for item in expected_type)
+        if expected_type == "array":
+            return isinstance(value, list)
+        if expected_type == "boolean":
+            return isinstance(value, bool)
+        if expected_type == "integer":
+            return isinstance(value, int) and not isinstance(value, bool)
+        if expected_type == "null":
+            return value is None
+        if expected_type == "number":
+            return isinstance(value, (int, float)) and not isinstance(value, bool)
+        if expected_type == "object":
+            return isinstance(value, dict)
+        if expected_type == "string":
+            return isinstance(value, str)
+        return True
+
+    @classmethod
+    def _json_type_label(cls, expected_type):
+        if isinstance(expected_type, (list, tuple)):
+            return " or ".join(cls._json_type_label(item) for item in expected_type)
+        return {
+            "array": "an array",
+            "boolean": "a boolean",
+            "integer": "an integer",
+            "null": "null",
+            "number": "a number",
+            "object": "an object",
+            "string": "a string",
+        }.get(expected_type, str(expected_type))
 
     @staticmethod
     def _dry_run_result(action, context, run_id, input_hash):

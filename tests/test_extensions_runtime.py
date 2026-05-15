@@ -237,6 +237,17 @@ class ExtensionRuntimeTestCase(unittest.TestCase):
         self.assertEqual(calls, [])
         self.assertEqual(task_runner.calls, [])
 
+    def test_dry_run_rejects_invalid_schema_payload(self):
+        result = create_builtin_extension_runtime().execute_action(
+            "stock_pool.import",
+            {"items": "not-a-list"},
+            {"dry_run": True},
+        )
+
+        self.assertFalse(result.ok)
+        self.assertEqual(result.error.code, "invalid_input")
+        self.assertEqual(result.error.details["field_errors"], {"items": "must be an array"})
+
     def test_async_submission_failure_returns_structured_error(self):
         class FailingTaskRunner:
             def submit(self, **kwargs):

@@ -78,7 +78,7 @@ def get_builtin_actions() -> list[ActionDefinition]:
             plugin_id="dsa-core",
             description="Import candidates into a DSA stock pool or watchlist.",
             handler=_handle_stock_pool_import,
-            input_schema={"type": "object", "required": ["items"]},
+            input_schema={"type": "object", "required": ["items"], "properties": {"items": {"type": "array"}}},
             permissions=["stock_pool.write"],
             requires_confirmation=True,
             category="portfolio",
