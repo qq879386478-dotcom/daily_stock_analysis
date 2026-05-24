@@ -134,6 +134,64 @@ class _FailingHistoryDb:
 
 
 class RunDiagnosticsP2TestCase(unittest.TestCase):
+    def test_news_diagnostics_use_retrieval_evidence_not_model_summary(self) -> None:
+        diagnostics = _diagnostic_snapshot()
+        diagnostics["provider_runs"] = [
+            {
+                "trace_id": "trace-p2",
+                "data_type": "realtime_quote",
+                "provider": "QuoteFetcher",
+                "operation": "get_realtime_quote",
+                "success": True,
+            },
+            {
+                "trace_id": "trace-p2",
+                "data_type": "daily_data",
+                "provider": "DailyFetcher",
+                "operation": "get_daily_data",
+                "success": True,
+                "record_count": 30,
+            },
+        ]
+
+        summary = build_run_diagnostic_summary(
+            context_snapshot={
+                "diagnostics": diagnostics,
+                "news_content": None,
+            },
+            raw_result={
+                "success": True,
+                "model_used": "deepseek-chat",
+                "analysis_summary": "测试摘要",
+                "news_summary": "模型生成的新闻摘要",
+            },
+            report_saved=True,
+        )
+
+        self.assertEqual(summary["components"]["news"]["status"], "degraded")
+        self.assertEqual(summary["status"], "degraded")
+
+    def test_news_result_count_zero_is_degraded_even_with_formatted_text(self) -> None:
+        diagnostics = _diagnostic_snapshot()
+
+        summary = build_run_diagnostic_summary(
+            context_snapshot={
+                "diagnostics": diagnostics,
+                "news_content": "【贵州茅台 情报搜索结果】\n  未找到相关信息",
+                "news_result_count": 0,
+            },
+            raw_result={
+                "success": True,
+                "model_used": "deepseek-chat",
+                "analysis_summary": "测试摘要",
+                "news_summary": "模型生成的新闻摘要",
+            },
+            report_saved=True,
+        )
+
+        self.assertEqual(summary["components"]["news"]["status"], "degraded")
+        self.assertEqual(summary["components"]["news"]["details"]["record_count"], 0)
+
     def test_summary_classifies_provider_fallback_as_degraded_and_copy_text_is_sanitized(self) -> None:
         summary = build_run_diagnostic_summary(
             context_snapshot={

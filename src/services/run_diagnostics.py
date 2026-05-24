@@ -555,11 +555,19 @@ def _news_component(context_snapshot: Dict[str, Any], raw_result: Dict[str, Any]
     label = "新闻搜索"
     has_snapshot_news = "news_content" in context_snapshot
     news_content = context_snapshot.get("news_content")
-    news_summary = raw_result.get("news_summary")
+    news_result_count = context_snapshot.get("news_result_count")
+    if isinstance(news_result_count, int):
+        if news_result_count > 0:
+            return _component(
+                "news",
+                label,
+                "ok",
+                f"新闻检索返回 {news_result_count} 条结果",
+                {"record_count": news_result_count},
+            )
+        return _component("news", label, "degraded", "新闻搜索无结果", {"record_count": 0})
     if isinstance(news_content, str) and news_content.strip():
         return _component("news", label, "ok", "新闻摘要已获取")
-    if isinstance(news_summary, str) and news_summary.strip():
-        return _component("news", label, "ok", "新闻摘要已写入报告")
     if has_snapshot_news:
         return _component("news", label, "degraded", "未获取到新闻摘要或新闻搜索无结果")
     return _component("news", label, "unknown", "新闻搜索未记录诊断信息")

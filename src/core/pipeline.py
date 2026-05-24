@@ -425,6 +425,7 @@ class StockAnalysisPipeline:
 
             # Step 4: 多维度情报搜索（最新消息+风险排查+业绩预期）
             news_context = None
+            news_result_count: Optional[int] = None
             self._emit_progress(46, f"{stock_name}：正在检索新闻与舆情")
             if self.search_service is not None and self.search_service.is_available:
                 logger.info(f"{stock_name}({code}) 开始多维度情报搜索...")
@@ -442,6 +443,7 @@ class StockAnalysisPipeline:
                     total_results = sum(
                         len(r.results) for r in intel_results.values() if r.success
                     )
+                    news_result_count = total_results
                     logger.info(f"{stock_name}({code}) 情报搜索完成: 共 {total_results} 条结果")
                     logger.debug(f"{stock_name}({code}) 情报搜索结果:\n{news_context}")
 
@@ -581,9 +583,11 @@ class StockAnalysisPipeline:
                     context_snapshot = self._build_context_snapshot(
                         enhanced_context=enhanced_context,
                         news_content=news_context,
+                        news_result_count=news_result_count,
                         realtime_quote=realtime_quote,
                         chip_data=chip_data
                     )
+                    result.diagnostic_context_snapshot = context_snapshot
                     saved_count = self.db.save_analysis_history(
                         result=result,
                         query_id=query_id,
@@ -1041,6 +1045,7 @@ class StockAnalysisPipeline:
                         realtime_quote=realtime_quote,
                         chip_data=chip_data,
                     )
+                    result.diagnostic_context_snapshot = history_context
                     history_context["stock_name"] = resolved_stock_name
                     saved_count = self.db.save_analysis_history(
                         result=result,
@@ -1665,7 +1670,8 @@ class StockAnalysisPipeline:
         enhanced_context: Dict[str, Any],
         news_content: Optional[str],
         realtime_quote: Any,
-        chip_data: Optional[ChipDistribution]
+        chip_data: Optional[ChipDistribution],
+        news_result_count: Optional[int] = None,
     ) -> Dict[str, Any]:
         """
         构建分析上下文快照
@@ -1676,6 +1682,8 @@ class StockAnalysisPipeline:
             "realtime_quote_raw": self._safe_to_dict(realtime_quote),
             "chip_distribution_raw": self._safe_to_dict(chip_data),
         }
+        if news_result_count is not None:
+            snapshot["news_result_count"] = news_result_count
         diagnostic_snapshot = current_diagnostic_snapshot()
         if diagnostic_snapshot is not None:
             snapshot["diagnostics"] = diagnostic_snapshot

@@ -694,6 +694,32 @@ class AnalysisApiContractTestCase(unittest.TestCase):
         self.assertEqual(result["stock_name"], "Unnamed Stock")
         self.assertEqual(result["report"]["meta"]["stock_name"], "Unnamed Stock")
 
+    def test_build_analysis_response_does_not_use_model_news_summary_as_retrieval_evidence(self) -> None:
+        service = AnalysisService()
+        result = service._build_analysis_response(
+            SimpleNamespace(
+                code="600519",
+                name="贵州茅台",
+                current_price=1234.56,
+                change_pct=1.23,
+                model_used="test-model",
+                analysis_summary="summary",
+                operation_advice="hold",
+                trend_prediction="up",
+                sentiment_score=80,
+                news_summary="model generated news summary",
+                technical_analysis="tech",
+                fundamental_analysis="fundamental",
+                risk_warning="risk",
+                get_sniper_points=lambda: {},
+            ),
+            "q1",
+            report_type="full",
+        )
+
+        news_component = result["diagnostic_summary"]["components"]["news"]
+        self.assertEqual(news_component["status"], "unknown")
+
     def test_build_analysis_report_extracts_fundamental_fields_from_snapshot(self) -> None:
         if _build_analysis_report is None:
             self.skipTest("analysis endpoint helpers unavailable in this environment")
