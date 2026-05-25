@@ -52,4 +52,21 @@ describe('alphasiftApi', () => {
     expect(post).toHaveBeenCalledWith('/api/v1/alphasift/install', {}, { timeout: 180000 });
     expect(updateConfig.mock.invocationCallOrder[0]).toBeLessThan(post.mock.invocationCallOrder[0]);
   });
+
+  it('keeps enable ordering when called without object binding', async () => {
+    getConfig.mockResolvedValueOnce({ configVersion: 'v1', maskToken: '******' });
+    updateConfig.mockResolvedValueOnce({ success: true });
+    post.mockResolvedValueOnce({
+      data: {
+        installed: true,
+        already_installed: true,
+        install_spec: 'git+https://github.com/ZhuLinsen/alphasift.git@2c76b2b6074ae3bae01d52e5e830a4af3e3246b2',
+      },
+    });
+
+    const enable = alphasiftApi.enable;
+    await enable();
+
+    expect(updateConfig.mock.invocationCallOrder[0]).toBeLessThan(post.mock.invocationCallOrder[0]);
+  });
 });

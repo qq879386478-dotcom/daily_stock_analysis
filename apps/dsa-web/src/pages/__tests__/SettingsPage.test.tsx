@@ -838,6 +838,44 @@ describe('SettingsPage', () => {
     expect(refreshAfterExternalSave).toHaveBeenCalledWith(['ALPHASIFT_ENABLED']);
   });
 
+  it('does not run AlphaSift install when enabling the config fails', async () => {
+    const configState = buildSystemConfigState();
+    updateSystemConfig.mockRejectedValueOnce(new Error('config update failed'));
+    useSystemConfigMock.mockReturnValue(buildSystemConfigState({
+      itemsByCategory: {
+        ...configState.itemsByCategory,
+        data_source: [
+          {
+            key: 'ALPHASIFT_ENABLED',
+            value: 'false',
+            rawValueExists: true,
+            isMasked: false,
+            schema: {
+              key: 'ALPHASIFT_ENABLED',
+              category: 'data_source',
+              dataType: 'boolean',
+              uiControl: 'switch',
+              isSensitive: false,
+              isRequired: false,
+              isEditable: true,
+              options: [],
+              validation: {},
+              displayOrder: 16,
+            },
+          },
+        ],
+      },
+    }));
+
+    render(<SettingsPage />);
+
+    fireEvent.click(screen.getByRole('button', { name: '开启选股' }));
+
+    await waitFor(() => expect(updateSystemConfig).toHaveBeenCalledTimes(1));
+    expect(alphasiftInstall).not.toHaveBeenCalled();
+    expect(refreshAfterExternalSave).not.toHaveBeenCalledWith(['ALPHASIFT_ENABLED']);
+  });
+
   it('renders notification test panel before notification fields', () => {
     useSystemConfigMock.mockReturnValue(buildSystemConfigState({ activeCategory: 'notification' }));
 

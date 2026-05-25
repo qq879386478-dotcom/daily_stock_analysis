@@ -475,18 +475,29 @@ const SettingsPage: React.FC = () => {
     setEnvBackupActionSuccess('');
     setIsUpdatingAlphaSift(true);
     try {
+      if (nextEnabled) {
+        await systemConfigApi.update({
+          configVersion,
+          maskToken,
+          reloadNow: true,
+          items: [{ key: 'ALPHASIFT_ENABLED', value: 'true' }],
+        });
+        notifyAlphaSiftConfigChanged();
+        await refreshAfterExternalSave(['ALPHASIFT_ENABLED']);
+        await alphasiftApi.install();
+        setEnvBackupActionSuccess('已开启 AlphaSift 选股，并完成依赖检查。');
+        return;
+      }
+
       await systemConfigApi.update({
         configVersion,
         maskToken,
         reloadNow: true,
-        items: [{ key: 'ALPHASIFT_ENABLED', value: nextEnabled ? 'true' : 'false' }],
+        items: [{ key: 'ALPHASIFT_ENABLED', value: 'false' }],
       });
       notifyAlphaSiftConfigChanged();
       await refreshAfterExternalSave(['ALPHASIFT_ENABLED']);
-      if (nextEnabled) {
-        await alphasiftApi.install();
-      }
-      setEnvBackupActionSuccess(nextEnabled ? '已开启 AlphaSift 选股，并完成依赖检查。' : '已关闭 AlphaSift 选股。');
+      setEnvBackupActionSuccess('已关闭 AlphaSift 选股。');
     } catch (error: unknown) {
       setEnvBackupActionError(getParsedApiError(error));
     } finally {

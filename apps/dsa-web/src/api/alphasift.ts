@@ -62,6 +62,6 @@ export const alphasiftApi = {
       items: [{ key: 'ALPHASIFT_ENABLED', value: 'true' }],
     });
     notifyAlphaSiftConfigChanged();
-    await this.install();
+    await alphasiftApi.install();
   },
 };
