@@ -26,6 +26,7 @@ def _return_value(value):
 
 def test_akshare_call_with_timeout_uses_spawn_context(monkeypatch) -> None:
     requested_methods = []
+    call_order = []
 
     class FakeConnection:
         def __init__(self, messages):
@@ -75,12 +76,20 @@ def test_akshare_call_with_timeout_uses_spawn_context(monkeypatch) -> None:
         Process = FakeProcess
 
     def fake_get_context(method=None):
+        call_order.append("get_context")
         requested_methods.append(method)
         return FakeContext()
+
+    def fake_freeze_support():
+        call_order.append("freeze_support")
 
     monkeypatch.setattr(
         "data_provider.akshare_fetcher.multiprocessing.get_context",
         fake_get_context,
+    )
+    monkeypatch.setattr(
+        "data_provider.akshare_fetcher.multiprocessing.freeze_support",
+        fake_freeze_support,
     )
 
     result = _akshare_call_with_timeout(
@@ -92,6 +101,7 @@ def test_akshare_call_with_timeout_uses_spawn_context(monkeypatch) -> None:
 
     assert result == "ok"
     assert requested_methods == ["spawn"]
+    assert call_order == ["freeze_support", "get_context"]
 
 
 def test_akshare_call_with_timeout_returns_promptly() -> None:
