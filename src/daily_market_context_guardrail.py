@@ -10,8 +10,8 @@ from src.report_language import normalize_report_language
 
 
 _CONSERVATIVE_TAGS = {"high_risk", "market_cooling", "conservative", "low_position_cap"}
-_CONSERVATIVE_TEXT_MARKERS_ZH = ("退潮", "观望", "高风险", "谨慎", "保守", "仓位上限", "轻仓")
-_CONSERVATIVE_TEXT_MARKERS_EN = ("high risk", "risk-off", "risk off", "watch", "cautious", "conservative", "position cap")
+_CONSERVATIVE_TEXT_MARKERS_ZH = ("退潮", "观望", "高风险", "谨慎", "保守", "仓位上限", "仓位不超过", "轻仓")
+_CONSERVATIVE_TEXT_MARKERS_EN = ("high risk", "risk-off", "risk off", "watch", "cautious", "conservative", "position cap", "position limit")
 _AGGRESSIVE_BUY_MARKERS_ZH = (
     "立即买入",
     "马上买入",
@@ -166,6 +166,8 @@ def _is_conservative_context(context: Any) -> bool:
         return False
     tags = context.get("risk_tags")
     if isinstance(tags, list) and any(str(tag) in _CONSERVATIVE_TAGS for tag in tags):
+        return True
+    if str(context.get("position_cap") or "").strip():
         return True
     summary = str(context.get("summary") or "")
     lowered = summary.lower()

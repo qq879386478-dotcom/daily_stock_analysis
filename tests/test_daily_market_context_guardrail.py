@@ -82,6 +82,33 @@ def test_conservative_market_context_softens_aggressive_buy() -> None:
     assert "大盘环境" in phase_decision["confidence_reason"]
 
 
+def test_position_cap_only_market_context_softens_aggressive_buy() -> None:
+    cases = [
+        ("zh", "市场震荡，仓位不超过30%。", "立即买入并积极加仓", "高", "观望"),
+        ("en", "Major indices are mixed. Position limit 30%.", "Buy now and add aggressively.", "High", "Watch"),
+    ]
+    for language, summary, advice, confidence, expected_advice in cases:
+        result = _result()
+        result.operation_advice = advice
+        result.confidence_level = confidence
+
+        adjustments = apply_daily_market_context_guardrail(
+            result,
+            daily_market_context={
+                "region": "us" if language == "en" else "cn",
+                "trade_date": "2026-06-06",
+                "summary": summary,
+                "risk_tags": [],
+                "position_cap": "30%",
+            },
+            report_language=language,
+        )
+
+        assert "daily_market_context_buy_softened" in adjustments
+        assert result.decision_type == "hold"
+        assert result.operation_advice == expected_advice
+
+
 def test_neutral_market_context_leaves_hold_unchanged() -> None:
     result = _result()
     result.decision_type = "hold"
