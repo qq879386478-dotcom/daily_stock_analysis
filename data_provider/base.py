@@ -29,6 +29,7 @@ from src.data.stock_mapping import STOCK_NAME_MAP, is_meaningful_stock_name
 from src.services.run_diagnostics import record_provider_run, record_provider_run_started
 from .fundamental_adapter import AkshareFundamentalAdapter
 from .yfinance_fundamental_adapter import YfinanceFundamentalAdapter
+from .realtime_types import CircuitBreaker
 
 # 配置日志
 logger = logging.getLogger(__name__)
@@ -565,6 +566,7 @@ class DataFetcherManager:
 
     _DAILY_MARKET_FETCHER_SUPPORT = {
         "EfinanceFetcher": {"cn"},
+        "TencentFetcher": {"cn"},
         "AkshareFetcher": {"cn", "hk"},
         "TushareFetcher": {"cn", "hk"},
         "PytdxFetcher": {"cn"},
@@ -574,6 +576,7 @@ class DataFetcherManager:
         "FinnhubFetcher": {"us"},
         "AlphaVantageFetcher": {"us"},
     }
+    _daily_source_health = CircuitBreaker(failure_threshold=3, cooldown_seconds=300.0)
 
     def __init__(self, fetchers: Optional[List[BaseFetcher]] = None):
         """
@@ -739,6 +742,45 @@ class DataFetcherManager:
             )
 
         return kept
+
+    @classmethod
+    def _daily_health_key(cls, fetcher: BaseFetcher, market: str) -> str:
+        return f"daily_data:{market}:{fetcher.name}"
+
+    @classmethod
+    def _filter_daily_fetchers_by_health(
+        cls,
+        fetchers: List[BaseFetcher],
+        market: str,
+    ) -> List[BaseFetcher]:
+        kept: List[BaseFetcher] = []
+        skipped: List[str] = []
+        for fetcher in fetchers:
+            key = cls._daily_health_key(fetcher, market)
+            if cls._daily_source_health.is_available(key):
+                kept.append(fetcher)
+            else:
+                skipped.append(fetcher.name)
+        if skipped:
+            logger.info(
+                "[数据源健康度] %s 日线跳过短期熔断的数据源: %s",
+                market,
+                ", ".join(skipped),
+            )
+        return kept
+
+    @classmethod
+    def _record_daily_source_success(cls, fetcher: BaseFetcher, market: str) -> None:
+        cls._daily_source_health.record_success(cls._daily_health_key(fetcher, market))
+
+    @classmethod
+    def _record_daily_source_failure(cls, fetcher: BaseFetcher, market: str, error: str) -> None:
+        cls._daily_source_health.record_failure(cls._daily_health_key(fetcher, market), error=error)
+
+    @classmethod
+    def reset_daily_source_health(cls) -> None:
+        """Reset daily source health state for tests/admin diagnostics."""
+        cls._daily_source_health.reset()
 
     def _get_cached_stock_name(self, stock_code: str) -> Optional[str]:
         self._ensure_concurrency_guards()
@@ -1052,6 +1094,7 @@ class DataFetcherManager:
         """
         from src.config import get_config
         from .efinance_fetcher import EfinanceFetcher
+        from .tencent_fetcher import TencentFetcher
         from .akshare_fetcher import AkshareFetcher
         from .tushare_fetcher import TushareFetcher
         from .pytdx_fetcher import PytdxFetcher
@@ -1061,6 +1104,7 @@ class DataFetcherManager:
         config = get_config()
         # 创建所有数据源实例（优先级在各 Fetcher 的 __init__ 中确定）
         efinance = EfinanceFetcher()
+        tencent = TencentFetcher()
         akshare = AkshareFetcher()
         pytdx = PytdxFetcher()      # 通达信数据源（可配 PYTDX_HOST/PYTDX_PORT）
         baostock = BaostockFetcher()
@@ -1097,6 +1141,7 @@ class DataFetcherManager:
         with self._fetchers_lock:
             self._fetchers = [
                 efinance,
+                tencent,
                 akshare,
                 pytdx,
                 baostock,
@@ -1165,9 +1210,11 @@ class DataFetcherManager:
         is_us_index = is_us_index_code(stock_code)
         is_us = is_us_index or is_us_stock_code(stock_code)
         is_hk = (not is_us) and _is_hk_market(stock_code)
+        market = "us" if is_us else "hk" if is_hk else "cn"
         if is_hk:
             fetchers = self._filter_daily_fetchers_for_market(fetchers, "hk")
         fetchers = self._filter_fetchers_by_capability(fetchers, capability="daily_data")
+        fetchers = self._filter_daily_fetchers_by_health(fetchers, market)
         total_fetchers = len(fetchers)
 
         if total_fetchers == 0:
@@ -1234,6 +1281,7 @@ class DataFetcherManager:
                                 f"[数据源完成] {stock_code} 使用 [{fetcher.name}] 获取成功: "
                                 f"rows={len(df)}, elapsed={elapsed:.2f}s"
                             )
+                            self._record_daily_source_success(fetcher, market)
                             return df, fetcher.name
                         duration_ms = int((time.time() - attempt_start) * 1000)
                         record_provider_run(
@@ -1247,6 +1295,7 @@ class DataFetcherManager:
                             fallback_to=fallback_to,
                             record_count=0,
                         )
+                        self._record_daily_source_failure(fetcher, market, "empty result")
                     except Exception as e:
                         error_type, error_reason = summarize_exception(e)
                         error_msg = f"[{fetcher.name}] ({error_type}) {error_reason}"
@@ -1265,6 +1314,7 @@ class DataFetcherManager:
                             f"[数据源失败 {attempt}/{total_fetchers}] [{fetcher.name}] {stock_code}: "
                             f"error_type={error_type}, reason={error_reason}"
                         )
+                        self._record_daily_source_failure(fetcher, market, error_reason)
                         errors.append(error_msg)
                     break
 
@@ -1307,6 +1357,7 @@ class DataFetcherManager:
                         f"[数据源完成] {stock_code} 使用 [{fetcher.name}] 获取成功: "
                         f"rows={len(df)}, elapsed={elapsed:.2f}s"
                     )
+                    self._record_daily_source_success(fetcher, market)
                     return df, fetcher.name
                 duration_ms = int((time.time() - attempt_start) * 1000)
                 record_provider_run(
@@ -1320,7 +1371,8 @@ class DataFetcherManager:
                     fallback_to=fallback_to,
                     record_count=0,
                 )
-                    
+                self._record_daily_source_failure(fetcher, market, "empty result")
+
             except Exception as e:
                 error_type, error_reason = summarize_exception(e)
                 error_msg = f"[{fetcher.name}] ({error_type}) {error_reason}"
@@ -1339,6 +1391,7 @@ class DataFetcherManager:
                     f"[数据源失败 {attempt}/{total_fetchers}] [{fetcher.name}] {stock_code}: "
                     f"error_type={error_type}, reason={error_reason}"
                 )
+                self._record_daily_source_failure(fetcher, market, error_reason)
                 errors.append(error_msg)
                 if attempt < total_fetchers:
                     next_fetcher = fetchers[attempt]
