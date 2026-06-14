@@ -13,7 +13,12 @@ if "litellm" not in sys.modules:
 if "json_repair" not in sys.modules:
     sys.modules["json_repair"] = MagicMock()
 
-from data_provider.base import BaseFetcher, DataFetcherManager
+from data_provider.base import (
+    BaseFetcher,
+    DataFetchError,
+    DataFetcherManager,
+    STANDARD_COLUMNS,
+)
 from data_provider.realtime_types import RealtimeSource, UnifiedRealtimeQuote
 
 
@@ -26,12 +31,18 @@ class _StubFetcher:
 class _EmptyRawFetcher(BaseFetcher):
     name = "EmptyRawFetcher"
     priority = 0
+    allow_empty_daily_data = True
 
     def _fetch_raw_data(self, stock_code: str, start_date: str, end_date: str) -> pd.DataFrame:
         return pd.DataFrame()
 
     def _normalize_data(self, df: pd.DataFrame, stock_code: str) -> pd.DataFrame:
         raise AssertionError("empty raw daily data should not be normalized")
+
+
+class _DefaultEmptyRawFetcher(_EmptyRawFetcher):
+    name = "DefaultEmptyRawFetcher"
+    allow_empty_daily_data = False
 
 
 def _make_quote(code: str = "AAPL") -> UnifiedRealtimeQuote:
@@ -69,7 +80,7 @@ def _make_daily_df() -> pd.DataFrame:
 
 
 class TestFetcherSourceOptimization(unittest.TestCase):
-    def test_base_fetcher_returns_empty_daily_data_without_error(self):
+    def test_base_fetcher_returns_opt_in_empty_daily_data_without_error(self):
         df = _EmptyRawFetcher().get_daily_data(
             "000001",
             start_date="2026-05-01",
@@ -77,6 +88,15 @@ class TestFetcherSourceOptimization(unittest.TestCase):
         )
 
         self.assertTrue(df.empty)
+        self.assertEqual(list(df.columns), STANDARD_COLUMNS)
+
+    def test_base_fetcher_rejects_empty_daily_data_by_default(self):
+        with self.assertRaises(DataFetchError):
+            _DefaultEmptyRawFetcher().get_daily_data(
+                "000001",
+                start_date="2026-05-01",
+                end_date="2026-05-08",
+            )
 
     @patch("src.config.get_config")
     def test_manager_skips_unconfigured_optional_fetchers(self, mock_get_config):

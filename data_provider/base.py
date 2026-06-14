@@ -457,7 +457,9 @@ class BaseFetcher(ABC):
                     f"[{self.name}] {stock_code} 返回空日线结果: 范围={start_date} ~ {end_date}, "
                     f"elapsed={elapsed:.2f}s"
                 )
-                return raw_df.copy()
+                if self.allow_empty_daily_data:
+                    return pd.DataFrame(columns=STANDARD_COLUMNS)
+                raise DataFetchError(f"[{self.name}] 未获取到 {stock_code} 的数据")
             
             # Step 2: 标准化列名
             df = self._normalize_data(raw_df, stock_code)
