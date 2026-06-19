@@ -367,7 +367,10 @@ class DecisionSignalService:
                 payload,
                 created_at=getattr(record, "created_at", None),
             )
-            self.create_signal(payload)
+            created = self.create_signal(payload)
+            signal_id = created.get("item", {}).get("id")
+            if isinstance(signal_id, int):
+                self._invalidate_history_backfill_if_superseded(signal_id)
         except Exception as exc:
             logger.warning(
                 "Decision signal lazy backfill failed: source_report_id=%s error=%s",
@@ -431,6 +434,39 @@ class DecisionSignalService:
         payload["expires_at"] = expires_at
         if self._is_expired(expires_at):
             payload["status"] = "expired"
+
+    def _invalidate_history_backfill_if_superseded(self, signal_id: int) -> None:
+        row = self.repo.get(signal_id)
+        if row is None or row.status != "active":
+            return
+
+        opposing_actions = self._opposing_actions(row.action)
+        if not opposing_actions:
+            return
+        newer_rows = self.repo.list_active_by_stock_actions(
+            market=row.market,
+            stock_code=row.stock_code,
+            actions=sorted(opposing_actions),
+            exclude_signal_id=row.id,
+        )
+        for newer_row in newer_rows:
+            if not self._is_prior_signal(row, newer_row, reference_at=newer_row.created_at):
+                continue
+            metadata_json = self._invalidation_metadata_json(row, invalidated_by=newer_row)
+            updated = self.repo.update_status(
+                row.id,
+                status="invalidated",
+                metadata_json=metadata_json,
+                replace_metadata=True,
+            )
+            if updated is None:
+                logger.warning(
+                    "Decision signal disappeared before stale backfill invalidation: "
+                    "signal_id=%s invalidated_by=%s",
+                    row.id,
+                    newer_row.id,
+                )
+            return
 
     @classmethod
     def _history_backfill_expires_at(

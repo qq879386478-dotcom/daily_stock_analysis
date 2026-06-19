@@ -274,6 +274,51 @@ def test_list_signals_lazily_backfills_analysis_history_signal(isolated_db) -> N
         assert session.query(DecisionSignalRecord).count() == 1
 
 
+def test_list_signals_invalidates_stale_backfill_when_newer_opposing_signal_exists(isolated_db) -> None:
+    record_id = isolated_db.save_analysis_history(
+        result=_history_result(
+            operation_advice="买入",
+            decision_type="buy",
+            action="buy",
+            action_label="买入",
+            analysis_summary="旧报告建议买入。",
+        ),
+        query_id="query-stale-backfill-buy",
+        report_type="simple",
+        news_content="新闻摘要",
+        context_snapshot={"market_phase_summary": {"phase": "postmarket"}},
+        save_snapshot=True,
+    )
+    report_created_at = utc_naive_now() - timedelta(days=1)
+    with isolated_db.get_session() as session:
+        row = session.query(AnalysisHistory).filter(AnalysisHistory.id == record_id).one()
+        row.created_at = report_created_at
+        session.commit()
+
+    service = DecisionSignalService(db_manager=isolated_db)
+    newer_sell = service.create_signal(
+        _payload(
+            source_report_id=record_id + 1000,
+            trace_id="trace-newer-opposing-sell",
+            action="sell",
+        )
+    )["item"]
+
+    listed = service.list_signals(source_type="analysis", source_report_id=record_id)
+
+    assert listed["total"] == 1
+    backfilled = listed["items"][0]
+    assert backfilled["source_report_id"] == record_id
+    assert backfilled["action"] == "buy"
+    assert backfilled["status"] == "invalidated"
+    assert backfilled["metadata"]["invalidated_by_signal_id"] == newer_sell["id"]
+    assert backfilled["metadata"]["invalidated_reason"] == "opposite_active_signal:buy->sell"
+    assert service.get_signal(newer_sell["id"])["status"] == "active"
+
+    latest = service.get_latest_active(stock_code="600519", limit=5)
+    assert [item["id"] for item in latest["items"]] == [newer_sell["id"]]
+
+
 def test_list_signals_does_not_backfill_market_review_history(isolated_db) -> None:
     record_id = isolated_db.save_analysis_history(
         result=_history_result(code="MARKET", name="大盘复盘", operation_advice="查看复盘"),
