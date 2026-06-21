@@ -359,7 +359,7 @@ const SchedulerSettingsCard: React.FC<SchedulerSettingsCardProps> = ({
       description={t('settings.schedulerDescription')}
     >
       <div data-testid="scheduler-settings-card" className="space-y-4">
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,1.3fr)_minmax(260px,0.7fr)]">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(300px,360px)]">
           <div className="space-y-4 rounded-2xl border settings-border bg-background/35 px-4 py-4">
             <label className="flex items-start gap-3">
               <input
@@ -380,15 +380,18 @@ const SchedulerSettingsCard: React.FC<SchedulerSettingsCardProps> = ({
                 <Clock className="h-4 w-4" aria-hidden="true" />
                 {t('settings.schedulerTimes')}
               </div>
-              <div className="space-y-2">
+              <div className="flex flex-wrap items-center gap-2">
                 {scheduleTimes.map((time, index) => (
-                  <div key={index} className="flex items-center gap-2">
+                  <div
+                    key={index}
+                    className="inline-flex h-11 shrink-0 items-center gap-1 rounded-xl border settings-border bg-card/90 p-1 shadow-inner"
+                  >
                     <input
                       data-testid={`scheduler-time-input-${index}`}
                       type="time"
                       value={SCHEDULE_TIME_PATTERN.test(time) ? time : ''}
                       aria-label={t('settings.schedulerTimeInputAria', { index: index + 1 })}
-                      className="h-10 min-w-0 flex-1 rounded-xl border settings-border bg-card px-3 text-sm text-foreground shadow-inner outline-none transition focus:border-cyan/60 focus:ring-4 focus:ring-cyan/10"
+                      className="h-9 w-[8.75rem] rounded-lg border-none bg-transparent px-2 text-sm font-medium text-foreground outline-none transition focus:bg-background/60 focus:ring-2 focus:ring-cyan/20"
                       disabled={disabled}
                       onChange={(event) => {
                         const nextTimes = scheduleTimes.map((currentTime, currentIndex) => (
@@ -397,34 +400,37 @@ const SchedulerSettingsCard: React.FC<SchedulerSettingsCardProps> = ({
                         updateScheduleTimes(nextTimes);
                       }}
                     />
-                    <Button
-                      type="button"
-                      variant="settings-secondary"
-                      size="sm"
-                      className="h-10 w-10 px-0"
-                      aria-label={t('settings.schedulerRemoveTime')}
-                      title={t('settings.schedulerRemoveTime')}
-                      disabled={disabled || scheduleTimes.length <= 1}
-                      onClick={() => {
-                        updateScheduleTimes(scheduleTimes.filter((_, currentIndex) => currentIndex !== index));
-                      }}
-                    >
-                      <Trash2 className="h-4 w-4" aria-hidden="true" />
-                    </Button>
+                    {scheduleTimes.length > 1 ? (
+                      <Button
+                        type="button"
+                        variant="settings-secondary"
+                        size="sm"
+                        className="h-8 w-8 rounded-lg px-0"
+                        aria-label={t('settings.schedulerRemoveTime')}
+                        title={t('settings.schedulerRemoveTime')}
+                        disabled={disabled}
+                        onClick={() => {
+                          updateScheduleTimes(scheduleTimes.filter((_, currentIndex) => currentIndex !== index));
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4" aria-hidden="true" />
+                      </Button>
+                    ) : null}
                   </div>
                 ))}
+                <Button
+                  type="button"
+                  variant="settings-secondary"
+                  size="sm"
+                  className="h-11 shrink-0"
+                  data-testid="scheduler-add-time-button"
+                  disabled={disabled}
+                  onClick={() => updateScheduleTimes([...scheduleTimes, SCHEDULER_DEFAULT_TIME])}
+                >
+                  <Plus className="h-4 w-4" aria-hidden="true" />
+                  {t('settings.schedulerAddTime')}
+                </Button>
               </div>
-              <Button
-                type="button"
-                variant="settings-secondary"
-                size="sm"
-                data-testid="scheduler-add-time-button"
-                disabled={disabled}
-                onClick={() => updateScheduleTimes([...scheduleTimes, SCHEDULER_DEFAULT_TIME])}
-              >
-                <Plus className="h-4 w-4" aria-hidden="true" />
-                {t('settings.schedulerAddTime')}
-              </Button>
             </div>
           </div>
 
