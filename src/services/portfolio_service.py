@@ -52,6 +52,17 @@ def _portfolio_limitations_for_market(market: str) -> List[str]:
     ]
 
 
+def _merge_portfolio_limitations(*groups: Iterable[str]) -> List[str]:
+    merged: List[str] = []
+    seen: Set[str] = set()
+    for group in groups:
+        for item in group:
+            if item and item not in seen:
+                seen.add(item)
+                merged.append(item)
+    return merged
+
+
 class PortfolioConflictError(Exception):
     """Raised when request conflicts with existing portfolio state."""
 
@@ -925,7 +936,15 @@ class PortfolioService:
 
         unrealized_pnl_base = market_value_base - total_cost_base
         total_equity_base = total_cash_base + market_value_base
-        limitations = _portfolio_limitations_for_market(account.market)
+        position_limitations = [
+            limitation
+            for position in position_rows
+            for limitation in position.get("limitations", [])
+        ]
+        limitations = _merge_portfolio_limitations(
+            _portfolio_limitations_for_market(account.market),
+            position_limitations,
+        )
 
         account_payload = {
             "account_id": account.id,
