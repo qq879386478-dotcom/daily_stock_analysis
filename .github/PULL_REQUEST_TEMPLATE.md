@@ -92,6 +92,7 @@ python -m pytest -m "not network"
 *(EN) Describe compatibility impact and potential risks (write `None` if not applicable).*
 
 - 若本 PR 修改第三方模型 / API 的兼容语义、请求参数、路由前缀或 provider fallback，请提供**官方来源链接或公告**，并说明这是长期约束、当前运行时约束还是临时兼容处理。  
+  若本 PR 涉及 Yahoo Finance 指数源（包括 JP/KR 主指数），需额外说明：已验证的指数 symbol 与回归证据（例如 `^N225`/`^TOPX`、`^KS11`/`^KQ11` 与 `tests/test_yfinance_jp_kr_indices.py` 结果）、以及回退范围（例如主指数失败时仅跳过对应市场复盘，不影响其他市场复盘和个股分析）。  
   *(EN) If this PR changes third-party model/API compatibility, request parameters, routing prefixes, or provider fallback behavior, include an **official source link or announcement** and clarify whether the rule is permanent, runtime-specific, or a temporary compatibility workaround.)*
 - 若本 PR 依赖特定运行时 / 锁定依赖窗口（例如 LiteLLM 版本范围、OpenAI-compatible 路由、YAML alias 行为），请写明当前验证过的兼容范围与覆盖路径。  
   *(EN) If this PR depends on a specific runtime or pinned dependency window (for example a LiteLLM version range, OpenAI-compatible routing, or YAML alias behavior), state the compatibility window you verified and which code paths were covered.)*
@@ -127,4 +128,5 @@ python -m pytest -m "not network"
 - [ ] 已评估兼容性与风险 / Compatibility and risk have been assessed
 - [ ] 已提供回滚方案 / A rollback plan is provided
 - [ ] 若修改报告格式或 Web UI 界面，已在 PR 描述/评论附受影响报告 / 页面截图，且未把一次性验收截图作为仓库文件合入 / If report formatting or Web UI changed, affected report/page screenshots are linked in the PR body/comments and one-off acceptance screenshots are not committed as repository files
+- [ ] 若本 PR 修改 Web 设置字段（如 `MARKET_REVIEW_REGION` 枚举、文案与帮助文本），请补充设置页截图；无法截图时需提供替代可视证据（命令 + 产物路径），并指向设置页变更项 / If Web settings fields changed (such as `MARKET_REVIEW_REGION` enums, labels, or help text), screenshots of the settings page are required; if unavailable, provide alternative visual evidence with command + artifact path that points to the changed fields.
 - [ ] 若涉及用户可见变更，已同步更新相关文档与 `docs/CHANGELOG.md`；`README.md` 仅在首页级信息变化时更新，细节优先写入 `docs/*.md` / If user-visible changes are included, relevant docs and `docs/CHANGELOG.md` are updated; `README.md` is updated only for homepage-level changes, with details kept in `docs/*.md`
