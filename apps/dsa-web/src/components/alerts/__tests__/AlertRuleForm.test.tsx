@@ -256,6 +256,18 @@ describe('AlertRuleForm', () => {
     });
   });
 
+  it('keeps JP/KR out of market light options in English UI mode', () => {
+    renderEnglishForm();
+
+    fireEvent.change(screen.getByLabelText('Target scope'), { target: { value: 'market' } });
+
+    expect(screen.getByRole('option', { name: 'A-shares (cn)' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Hong Kong (hk)' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'US (us)' })).toBeInTheDocument();
+    expect(screen.queryByRole('option', { name: 'Japan (jp)' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('option', { name: 'Korea (kr)' })).not.toBeInTheDocument();
+  });
+
   it('submits a market light score-drop rule payload', async () => {
     render(<AlertRuleForm onSubmit={onSubmit} />);
 
