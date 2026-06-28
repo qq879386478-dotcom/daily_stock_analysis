@@ -587,16 +587,11 @@ def _resolve_daily_market_context_target_date(
     current_time: datetime,
 ) -> date:
     normalized_region = str(region or "cn").strip().lower()
-    markets = {"cn", "hk", "us", "jp", "kr"}
-    if normalized_region in markets:
-        market = normalized_region
-    else:
+    market = normalized_region if normalized_region in {"cn", "hk", "us", "jp", "kr"} else "cn"
+    if "," in normalized_region:
         parts = [item.strip() for item in normalized_region.split(",") if item.strip()]
-        market = (
-            parts[0]
-            if parts and all(item in {"jp", "kr"} for item in parts)
-            else "cn"
-        )
+        if parts and all(item in {"jp", "kr"} for item in parts):
+            market = parts[0]
 
     from src.core.trading_calendar import get_effective_trading_date
 

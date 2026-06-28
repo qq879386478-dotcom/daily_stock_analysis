@@ -86,7 +86,7 @@ Market Light / 告警：
 - 兼容性核验：本次仅收敛 Market Light 告警到 `cn/hk/us`，不更改 provider/model/base_url 持久化链路；`.env.example`、`src/config.py`、`src/core/config_registry.py`、`src/services/system_config_service.py` 对已有 provider/provider-key 语义不做清空或迁移改写；可通过 `tests/test_system_config_service.py` 与 `tests/test_config_env_compat.py` 回归验证。
 - 运行时回退：若需要恢复旧行为，移除 `jp/kr` 对 Market Light 的误用入口（或回退该 PR）即可，保留既有配置路径不变。
 - 合并状态说明：当前提交已处理完与基线的冲突标记，仓库中不含 `<<<<<<<` / `=======` / `>>>>>>>` 片段；变更前后后端/Web/文档链路对齐后完成回归复测。
-- Web UI 变更可追溯证据：`apps/dsa-web/src/components/alerts/__tests__/AlertRuleForm.test.tsx` 覆盖 `market` 场景下仅展示 `cn/hk/us`，且 `apps/dsa-web/src/components/settings/__tests__/SettingsField.test.tsx` 覆盖 `MARKET_REVIEW_REGION` 的 JP/KR 多选与 `both` 互斥交互；受限环境无法稳定产出 UI 截图时，使用以下可复用证据：
+- Web UI 变更可追溯证据：`apps/dsa-web/src/components/alerts/__tests__/AlertRuleForm.test.tsx` 覆盖 `market` 场景下仅展示 `cn/hk/us`，且 `apps/dsa-web/src/components/settings/__tests__/SettingsField.test.tsx` 覆盖 `MARKET_REVIEW_REGION` 的自由文本逗号子集输入；受限环境无法稳定产出 UI 截图时，使用以下可复用证据：
   - `cd apps/dsa-web && npx vitest run src/components/alerts/__tests__/AlertRuleForm.test.tsx src/components/settings/__tests__/SettingsField.test.tsx`
   - `python -m pytest tests/test_market_light_service.py tests/test_market_light_alerts.py -q`
   - `python -m pytest tests/test_portfolio_service.py -q`

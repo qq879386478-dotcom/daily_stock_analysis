@@ -117,92 +117,6 @@ describe('SettingsField', () => {
     expect(screen.getAllByRole('button', { name: '删除' })).toHaveLength(2);
   });
 
-  it('renders multi-value select field as checkbox group and serializes updates', () => {
-    const onChange = vi.fn();
-
-    render(
-      <SettingsField
-        item={{
-          key: 'MARKET_REVIEW_REGION',
-          value: 'cn,jp',
-          rawValueExists: true,
-          isMasked: false,
-          schema: {
-            key: 'MARKET_REVIEW_REGION',
-            title: 'Market Review Region',
-            category: 'system',
-            dataType: 'string',
-            uiControl: 'select',
-            isSensitive: false,
-            isRequired: false,
-            isEditable: true,
-            options: ['cn', 'hk', 'us', 'jp', 'kr', 'both'],
-            validation: { multiValue: true },
-            displayOrder: 1,
-          },
-        }}
-        value="cn,jp"
-        onChange={onChange}
-      />
-    );
-
-    const cnOption = screen.getByRole('checkbox', { name: 'A 股' });
-    const hkOption = screen.getByRole('checkbox', { name: '港股' });
-    const jpOption = screen.getByRole('checkbox', { name: '日股' });
-
-    expect(cnOption).toBeChecked();
-    expect(jpOption).toBeChecked();
-    expect(hkOption).not.toBeChecked();
-
-    fireEvent.click(hkOption);
-    expect(onChange).toHaveBeenLastCalledWith('MARKET_REVIEW_REGION', 'cn,hk,jp');
-
-  });
-
-  it('keeps the all-markets market review checkbox mutually exclusive', () => {
-    const onChange = vi.fn();
-    const renderMarketReviewRegion = (fieldValue: string) => (
-      <SettingsField
-        item={{
-          key: 'MARKET_REVIEW_REGION',
-          value: fieldValue,
-          rawValueExists: true,
-          isMasked: false,
-          schema: {
-            key: 'MARKET_REVIEW_REGION',
-            title: 'Market Review Region',
-            category: 'system',
-            dataType: 'string',
-            uiControl: 'select',
-            isSensitive: false,
-            isRequired: false,
-            isEditable: true,
-            options: ['cn', 'hk', 'us', 'jp', 'kr', 'both'],
-            validation: { multiValue: true },
-            displayOrder: 1,
-          },
-        }}
-        value={fieldValue}
-        onChange={onChange}
-      />
-    );
-
-    const { rerender } = render(renderMarketReviewRegion('cn,hk,both'));
-
-    expect(screen.getByRole('checkbox', { name: '全部市场' })).toBeChecked();
-    expect(screen.getByRole('checkbox', { name: 'A 股' })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: '港股' })).not.toBeChecked();
-
-    fireEvent.click(screen.getByRole('checkbox', { name: 'A 股' }));
-    expect(onChange).toHaveBeenLastCalledWith('MARKET_REVIEW_REGION', 'cn');
-
-    onChange.mockClear();
-    rerender(renderMarketReviewRegion('cn,hk'));
-
-    fireEvent.click(screen.getByRole('checkbox', { name: '全部市场' }));
-    expect(onChange).toHaveBeenLastCalledWith('MARKET_REVIEW_REGION', 'both');
-  });
-
   it('allows optional select fields to be cleared when schema provides an empty option', () => {
     const onChange = vi.fn();
 
@@ -301,12 +215,6 @@ describe('SettingsField', () => {
         options: ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
         expectedLabels: ['调试', '信息', '警告', '错误', '严重'],
       },
-      {
-        key: 'MARKET_REVIEW_REGION',
-        category: 'system',
-        options: ['cn', 'hk', 'us', 'jp', 'kr', 'both'],
-        expectedLabels: ['A 股', '港股', '美股', '日股', '韩股', '全部市场'],
-      },
     ] as const;
 
     selectCases.forEach(({ key, category, options, expectedLabels }) => {
@@ -346,6 +254,45 @@ describe('SettingsField', () => {
 
       unmount();
     });
+  });
+
+  it('renders MARKET_REVIEW_REGION as free-text field with comma-separated defaults', () => {
+    const onChange = vi.fn();
+
+    render(
+      <SettingsField
+        item={{
+          key: 'MARKET_REVIEW_REGION',
+          value: 'cn,jp',
+          rawValueExists: true,
+          isMasked: false,
+          schema: {
+            key: 'MARKET_REVIEW_REGION',
+            category: 'system',
+            dataType: 'string',
+            uiControl: 'text',
+            isSensitive: false,
+            isRequired: false,
+            isEditable: true,
+            options: [],
+            validation: {},
+            displayOrder: 1,
+          },
+        }}
+        value="cn,jp"
+        onChange={onChange}
+      />
+    );
+
+    const input = screen.getByLabelText('大盘复盘市场') as HTMLInputElement;
+    expect(input).toHaveValue('cn,jp');
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+
+    fireEvent.change(input, {
+      target: { value: 'cn,jp,kr' },
+    });
+
+    expect(onChange).toHaveBeenCalledWith('MARKET_REVIEW_REGION', 'cn,jp,kr');
   });
 
   it('renders context compression profile options with Chinese labels', () => {

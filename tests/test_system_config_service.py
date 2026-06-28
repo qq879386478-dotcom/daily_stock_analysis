@@ -1233,7 +1233,10 @@ class SystemConfigServiceTestCase(unittest.TestCase):
             ["cost", "balanced", "long_context_raw_first"],
         )
         market_review_schema = items["MARKET_REVIEW_REGION"]["schema"]
-        self.assertTrue(market_review_schema["validation"]["multi_value"])
+        self.assertEqual(
+            market_review_schema["validation"]["allowed_values"],
+            ["cn", "hk", "us", "jp", "kr", "both"],
+        )
         self.assertEqual(market_review_schema["validation"]["delimiter"], ",")
         self.assertEqual(
             items["AGENT_CONTEXT_COMPRESSION_TRIGGER_TOKENS"]["schema"]["default_value"],

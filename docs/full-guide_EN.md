@@ -362,7 +362,7 @@ For the notification baseline, diagnostics, and deployment notes, see [Notificat
 | `MAX_WORKERS` | Concurrent threads | `3` |
 | `MARKET_REVIEW_ENABLED` | Enable market review | `true` |
 | `DAILY_MARKET_CONTEXT_ENABLED` | Inject the daily market context into stock-analysis prompts and soften aggressive buy advice in high-risk/risk-off markets; enabled by default, and market review can still run when this is set to `false` | `true` |
-| `MARKET_REVIEW_REGION` | Market review region: cn (A-shares), hk (Hong Kong stocks), us (US stocks), jp (Japan stocks), kr (Korean stocks), both (cn/hk/us/jp/kr) | `cn` |
+| `MARKET_REVIEW_REGION` | Market review region: cn (A-shares), hk (Hong Kong stocks), us (US stocks), jp (Japan stocks), kr (Korean stocks), both (cn/hk/us/jp/kr); comma-separated subsets such as `cn,us,jp` are supported; `jp`/`kr` do not open Market Light alerts | `cn` |
 | `MARKET_REVIEW_COLOR_SCHEME` | Index change color style in market reviews: `green_up` = green gains/red losses (default), `red_up` = red gains/green losses | `green_up` |
 | `SCHEDULE_ENABLED` | Enable scheduled tasks | `false` |
 | `SCHEDULE_TIME` | Scheduled execution time | `18:00` |
@@ -386,7 +386,7 @@ For the notification baseline, diagnostics, and deployment notes, see [Notificat
 > - Merge-state check: this PR branch has no unresolved merge markers (`<<<<<<<`, `=======`, `>>>>>>>`) before verification; configuration scope and runtime semantics were revalidated by the checks below before handoff.
 > - Compatibility checks: `tests/test_market_light_service.py` (Market Light market scope), `tests/test_market_light_alerts.py` (JP/KR alert rejection path), `tests/test_portfolio_service.py` (JP/KR snapshot `data_quality` limits), `tests/test_system_config_service.py` (provider/model/base URL compatibility and fallback), and `tests/test_config_env_compat.py` (runtime config source precedence).
 > - Official references: LiteLLM OpenAI-compatible docs <https://docs.litellm.ai/docs/providers/openai_compatible> and OpenAI Chat API <https://platform.openai.com/docs/api-reference/chat>.
-> - Web visual evidence substitute: Market Light dropdown/market scope behavior is locked by `apps/dsa-web/src/components/alerts/__tests__/AlertRuleForm.test.tsx` assertions that JP/KR are absent from the market options; `apps/dsa-web/src/components/settings/__tests__/SettingsField.test.tsx` covers the `MARKET_REVIEW_REGION` JP/KR multi-select and mutually exclusive `both` interaction. If screenshots cannot be attached, cite test output with these commands:
+> - Web visual evidence substitute: Market Light dropdown/market scope behavior is locked by `apps/dsa-web/src/components/alerts/__tests__/AlertRuleForm.test.tsx` assertions that JP/KR are absent from the market options; `apps/dsa-web/src/components/settings/__tests__/SettingsField.test.tsx` covers `MARKET_REVIEW_REGION` as free-text comma-subset input, including `cn,jp` -> `cn,jp,kr`. If screenshots cannot be attached, cite test output with these commands:
 >   - `cd apps/dsa-web && npx vitest run src/components/alerts/__tests__/AlertRuleForm.test.tsx src/components/settings/__tests__/SettingsField.test.tsx`
 >   - `cd apps/dsa-web && npm run test -- src/components/alerts/__tests__/AlertRuleForm.test.tsx src/components/settings/__tests__/SettingsField.test.tsx`
 > - Rollback: restore pre-PR `.env`/config backup values and `MARKET_REVIEW_REGION` settings, or revert this PR.

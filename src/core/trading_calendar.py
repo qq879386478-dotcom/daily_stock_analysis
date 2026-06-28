@@ -543,37 +543,44 @@ def compute_effective_region(
     Compute effective market review region given config and open markets.
 
     Args:
-        config_region: From MARKET_REVIEW_REGION ('cn' | 'hk' | 'us' | 'jp' | 'kr' | 'both' | comma-separated variants)
+        config_region: From MARKET_REVIEW_REGION ('cn' | 'hk' | 'us' | 'jp' | 'kr' | 'both' or comma subset)
         open_markets: Markets open today
 
     Returns:
         None: caller uses config default (check disabled)
         '': all relevant markets closed, skip market review
-        'cn' | 'hk' | 'us' | 'jp' | 'kr' | comma-separated variants: effective subset for today
+        'cn' | 'hk' | 'us' | 'jp' | 'kr' | 'both': effective subset for today
     """
     markets = ("cn", "hk", "us", "jp", "kr")
-    supported_markets = set(markets)
-    raw_regions = [item.strip().lower() for item in str(config_region or "cn").split(",")]
-    explicit_regions = [item for item in raw_regions if item]
-    if not explicit_regions:
-        explicit_regions = ["cn"]
-    if "both" in explicit_regions:
-        requested_markets = set(markets)
+    normalized = (config_region or "cn").strip().lower()
+    if not normalized:
+        normalized = "cn"
+
+    requested = {
+        item.strip() for item in normalized.split(",") if item.strip()
+    }
+    if not requested:
+        requested = {"cn"}
+
+    if "both" in requested:
+        requested = set(markets)
     else:
-        requested_markets = {item for item in explicit_regions if item in supported_markets}
-        if not requested_markets:
-            requested_markets = {"cn"}
+        # Ignore invalid tokens and only keep known markets.
+        requested = {item for item in requested if item in markets}
 
-    # If config is comma-separated / both, keep canonical order for deterministic
-    # override-region values.
-    requested_ordered = [m for m in markets if m in requested_markets]
-    if not requested_ordered:
-        return ""
+    if not requested:
+        # No valid market token left after filtering; follow parser fallback behavior.
+        requested = {"cn"}
 
-    # Return only the requested markets that are open today.
-    parts = [m for m in requested_ordered if m in open_markets]
-    if not parts:
+    # single explicit region: keep single-region return semantics (empty when closed)
+    if len(requested) == 1:
+        region = next(iter(requested))
+        return region if region in open_markets else ""
+
+    # multi-region subset: keep only markets open today, in canonical order
+    open_selected = [m for m in markets if m in requested and m in open_markets]
+    if not open_selected:
         return ""
-    if len(parts) == 1:
-        return parts[0]
-    return ",".join(parts)
+    if len(open_selected) == 1:
+        return open_selected[0]
+    return ",".join(open_selected)

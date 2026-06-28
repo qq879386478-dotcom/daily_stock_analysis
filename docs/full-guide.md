@@ -439,7 +439,7 @@ daily_stock_analysis/
 | `MAX_WORKERS` | 并发线程数 | `3` |
 | `MARKET_REVIEW_ENABLED` | 启用大盘复盘 | `true` |
 | `DAILY_MARKET_CONTEXT_ENABLED` | 将当日大盘环境摘要注入个股分析 Prompt，并在高风险/退潮环境下软化激进买入建议；默认开启，设为 `false` 后仍可运行大盘复盘 | `true` |
-| `MARKET_REVIEW_REGION` | 大盘复盘市场区域：cn(A股)、hk(港股)、us(美股)、jp(日股)、kr(韩股)、both(四大市场)；`both`=cn/hk/us/jp/kr；`jp`/`kr`仅用于大盘复盘报告，不会放开 Market Light 告警。 | `cn` |
+| `MARKET_REVIEW_REGION` | 大盘复盘市场区域：cn(A股)、hk(港股)、us(美股)、jp(日股)、kr(韩股)、both(五市场)；支持逗号子集（如 `cn,us,jp`）；`jp`/`kr`仅用于大盘复盘报告，不会放开 Market Light 告警。 | `cn` |
 | `MARKET_REVIEW_COLOR_SCHEME` | 大盘复盘指数涨跌颜色：`green_up`=绿涨红跌（默认），`red_up`=红涨绿跌 | `green_up` |
 | `TRADING_DAY_CHECK_ENABLED` | 交易日检查：默认 `true`，非交易日跳过执行；设为 `false` 或使用 `--force-run` 可强制执行（Issue #373） | `true` |
 | `SCHEDULE_ENABLED` | 启用定时任务 | `false` |
@@ -763,7 +763,7 @@ docker run -e SCHEDULE_ENABLED=true -e SCHEDULE_RUN_IMMEDIATELY=false ...
 > - 合并状态：当前提交已去除未决合并冲突标记，当前工作树无 `<<<<<<<` / `=======` / `>>>>>>>` 残留；请在回归验证后按上述回退路径处理。
 > - 兼容检测项：`tests/test_market_light_service.py`（Market Light 市场枚举范围）、`tests/test_market_light_alerts.py`（JP/KR 告警拒绝链路）、`tests/test_portfolio_service.py`（JP/KR 快照 `data_quality` 限制）、`tests/test_system_config_service.py`（provider/model/base_url 配置兼容与回退）、`tests/test_config_env_compat.py`（配置源回退语义）。
 > - 官方依据：LiteLLM OpenAI-compatible <https://docs.litellm.ai/docs/providers/openai_compatible> 与 OpenAI Chat API <https://platform.openai.com/docs/api-reference/chat>。
-> - PR 可视证据替代：Market Light 下拉与告警范围变化已被 `apps/dsa-web/src/components/alerts/__tests__/AlertRuleForm.test.tsx` 的断言锁定（`日股（jp）`、`韩股（kr）` 在 `market` 选项中不可见）；`MARKET_REVIEW_REGION` 的 JP/KR 多选与 `both` 互斥交互已由 `apps/dsa-web/src/components/settings/__tests__/SettingsField.test.tsx` 覆盖。无法提供截图时，可在 PR 描述引用该测试输出、截图路径与命令：
+> - PR 可视证据替代：Market Light 下拉与告警范围变化已被 `apps/dsa-web/src/components/alerts/__tests__/AlertRuleForm.test.tsx` 的断言锁定（`日股（jp）`、`韩股（kr）` 在 `market` 选项中不可见）；`MARKET_REVIEW_REGION` 的自由文本逗号子集输入（如 `cn,jp` -> `cn,jp,kr`）已由 `apps/dsa-web/src/components/settings/__tests__/SettingsField.test.tsx` 覆盖。无法提供截图时，可在 PR 描述引用该测试输出、截图路径与命令：
 >   - `cd apps/dsa-web && npx vitest run src/components/alerts/__tests__/AlertRuleForm.test.tsx src/components/settings/__tests__/SettingsField.test.tsx`
 >   - `cd apps/dsa-web && npm run test -- src/components/alerts/__tests__/AlertRuleForm.test.tsx src/components/settings/__tests__/SettingsField.test.tsx`
 > - 可回滚路径：恢复提交前 `.env` / 配置备份中的 `MARKET_REVIEW_REGION` 与相关运行时变量，或直接 revert 本 PR。
