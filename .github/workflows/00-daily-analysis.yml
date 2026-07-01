@@ -521,7 +521,7 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add reports/ logs/ 2>/dev/null || true
+          git add -f reports/ logs/ 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "📭 无变更"
           else
