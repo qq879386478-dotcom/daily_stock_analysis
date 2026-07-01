@@ -1,0 +1,608 @@
+2026-07-01 09:42:31 | INFO     | root | src/logging_config.py:188 | 日志系统初始化完成，日志目录: logs
+2026-07-01 09:42:31 | INFO     | root | src/logging_config.py:189 | 常规日志: logs/stock_analysis_20260701.log
+2026-07-01 09:42:31 | INFO     | root | src/logging_config.py:190 | 调试日志: logs/stock_analysis_debug_20260701.log
+2026-07-01 09:42:31 | INFO     | __main__ | main.py:1261 | ============================================================
+2026-07-01 09:42:31 | INFO     | __main__ | main.py:1262 | A股自选股智能分析系统 启动
+2026-07-01 09:42:31 | INFO     | __main__ | main.py:1263 | 运行时间: 2026-07-01 09:42:31
+2026-07-01 09:42:31 | INFO     | __main__ | main.py:1264 | ============================================================
+2026-07-01 09:42:31 | WARNING  | __main__ | main.py:1269 | 未配置 Tushare Token，将使用其他数据源
+2026-07-01 09:42:31 | WARNING  | __main__ | main.py:1269 | 未配置通知渠道，将不发送推送通知
+2026-07-01 09:42:38 | INFO     | src.services.stock_index_remote_service | src/services/stock_index_remote_service.py:246 | [stock-index] remote index refreshed: /home/runner/work/daily_stock_analysis/daily_stock_analysis/data/cache/stocks.index.json
+2026-07-01 09:42:38 | INFO     | __main__ | main.py:508 | [stock-index] 分析前已刷新股票索引缓存: /home/runner/work/daily_stock_analysis/daily_stock_analysis/data/cache/stocks.index.json
+2026-07-01 09:42:38 | INFO     | src.storage | src/storage.py:1189 | 数据库初始化完成: sqlite:////home/runner/work/daily_stock_analysis/daily_stock_analysis/data/stock_analysis.db
+2026-07-01 09:42:38 | INFO     | data_provider.base | data_provider/base.py:1231 | 已初始化 6 个数据源（按优先级）: EfinanceFetcher(P0), TencentFetcher(P0), AkshareFetcher(P1), PytdxFetcher(P2), BaostockFetcher(P3), YfinanceFetcher(P4)
+2026-07-01 09:42:38 | INFO     | src.analyzer | src/analyzer.py:2478 | Analyzer LLM: litellm initialized (model=openai/deepseek-chat)
+2026-07-01 09:42:38 | WARNING  | src.notification_sender.feishu_sender | src/notification_sender/feishu_sender.py:105 | 无效的 FEISHU_DOMAIN=，回退为 feishu
+2026-07-01 09:42:38 | WARNING  | src.notification | src/notification.py:254 | 未配置有效的通知渠道，将不发送推送通知
+2026-07-01 09:42:38 | INFO     | src.search_service | src/search_service.py:2339 | 已启用 SearXNG 公共实例自动发现模式
+2026-07-01 09:42:38 | INFO     | src.search_service | src/search_service.py:2355 | 新闻时效策略已启用: profile=short, profile_days=3, NEWS_MAX_AGE_DAYS=3, effective_window=3
+2026-07-01 09:42:38 | INFO     | src.core.pipeline | src/core/pipeline.py:248 | 调度器初始化完成，最大并发数: 1
+2026-07-01 09:42:38 | INFO     | src.core.pipeline | src/core/pipeline.py:249 | 已启用技术分析引擎（均线/趋势/量价指标）
+2026-07-01 09:42:38 | INFO     | src.core.pipeline | src/core/pipeline.py:252 | 实时行情已启用 (优先级: tencent,akshare_sina,efinance,akshare_em)
+2026-07-01 09:42:38 | INFO     | src.core.pipeline | src/core/pipeline.py:258 | 筹码分布分析已禁用
+2026-07-01 09:42:38 | INFO     | src.core.pipeline | src/core/pipeline.py:262 | 搜索服务已启用
+2026-07-01 09:42:38 | INFO     | src.core.pipeline | src/core/pipeline.py:2882 | ===== 开始分析 5 只股票 =====
+2026-07-01 09:42:38 | INFO     | src.core.pipeline | src/core/pipeline.py:2883 | 股票列表: 600519, 000001, 601318, 000858, 600036
+2026-07-01 09:42:38 | INFO     | src.core.pipeline | src/core/pipeline.py:2884 | 并发数: 1, 模式: 完整分析
+2026-07-01 09:42:38 | INFO     | data_provider.base | data_provider/base.py:1550 | [预取] component=realtime_prefetch action=skip reason=no_early_prefetch_source priority=tencent,akshare_sina,efinance,akshare_em
+2026-07-01 09:42:38 | INFO     | src.core.pipeline | src/core/pipeline.py:2778 | ========== 开始处理 600519 ==========
+2026-07-01 09:42:38 | INFO     | src.core.pipeline | src/core/pipeline.py:343 | 贵州茅台(600519) 开始从数据源获取数据...
+2026-07-01 09:42:38 | INFO     | data_provider.base | data_provider/base.py:1412 | [数据源尝试 1/6] [EfinanceFetcher] 获取 600519...
+2026-07-01 09:42:38 | INFO     | data_provider.base | data_provider/base.py:483 | [EfinanceFetcher] 开始获取 600519 日线数据: 范围=2026-05-02 ~ 2026-07-01
+2026-07-01 09:42:41 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:419 | [API调用] ef.stock.get_quote_history(stock_codes=600519, beg=20260502, end=20260701, klt=101, fqt=1)
+2026-07-01 09:42:43 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:441 | [API返回] Eastmoney 历史K线成功: endpoint=push2his.eastmoney.com/api/qt/stock/kline/get, stock_code=600519, range=20260502~20260701, rows=40, elapsed=2.24s
+2026-07-01 09:42:43 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:446 | [API返回] 列名: ['股票名称', '股票代码', '日期', '开盘', '收盘', '最高', '最低', '成交量', '成交额', '振幅', '涨跌幅', '涨跌额', '换手率']
+2026-07-01 09:42:43 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:448 | [API返回] 日期范围: 2026-05-06 ~ 2026-07-01
+2026-07-01 09:42:43 | INFO     | data_provider.base | data_provider/base.py:511 | [EfinanceFetcher] 600519 获取成功: 范围=2026-05-02 ~ 2026-07-01, rows=40, elapsed=4.82s
+2026-07-01 09:42:43 | INFO     | data_provider.base | data_provider/base.py:1438 | [数据源完成] 600519 使用 [EfinanceFetcher] 获取成功: rows=40, elapsed=4.82s
+2026-07-01 09:42:43 | INFO     | src.storage | src/storage.py:2511 | 保存 600519 数据成功，新增 40 条
+2026-07-01 09:42:43 | INFO     | src.core.pipeline | src/core/pipeline.py:351 | 贵州茅台(600519) 数据保存成功（来源: EfinanceFetcher，新增 40 条）
+2026-07-01 09:42:43 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1226 | [API调用] 腾讯财经接口获取 600519 实时行情: endpoint=qt.gtimg.cn/q, symbol=sh600519
+2026-07-01 09:42:46 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1333 | [实时行情-腾讯] 600519 贵州茅台: endpoint=qt.gtimg.cn/q, 价格=1193.01, 涨跌=0.63%, 量比=0.85, 换手率=0.34%, elapsed=3.37s
+2026-07-01 09:42:46 | INFO     | data_provider.base | data_provider/base.py:1917 | [实时行情] 600519 成功获取 (来源: tencent)
+2026-07-01 09:42:46 | INFO     | src.core.pipeline | src/core/pipeline.py:432 | 贵州茅台(600519) 实时行情: 价格=1193.01, 量比=0.85, 换手率=0.34% (来源: tencent)
+2026-07-01 09:42:46 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1226 | [API调用] 腾讯财经接口获取 600519 实时行情: endpoint=qt.gtimg.cn/q, symbol=sh600519
+2026-07-01 09:42:52 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1333 | [实时行情-腾讯] 600519 贵州茅台: endpoint=qt.gtimg.cn/q, 价格=1193.01, 涨跌=0.63%, 量比=0.85, 换手率=0.34%, elapsed=6.03s
+2026-07-01 09:42:52 | INFO     | data_provider.base | data_provider/base.py:1917 | [实时行情] 600519 成功获取 (来源: tencent)
+2026-07-01 09:42:56 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:1167 | [API调用] ef.stock.get_belong_board(stock_code=600519) 获取所属板块...
+2026-07-01 09:42:59 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:1176 | [API返回] ef.stock.get_belong_board 成功: 返回 29 个板块, 耗时 2.36s
+2026-07-01 09:42:59 | INFO     | data_provider.base | data_provider/base.py:2338 | [EfinanceFetcher] 获取所属板块成功: 600519, count=29
+2026-07-01 09:43:01 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1981 | [API调用] ak.stock_board_concept_name_em() 获取概念排行...
+2026-07-01 09:43:08 | WARNING  | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:2007 | [Akshare] 获取概念排行失败: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2026-07-01 09:43:08 | WARNING  | data_provider.base | data_provider/base.py:3686 | [概念排行] 所有数据源均失败，最终错误: YfinanceFetcher返回空结果
+2026-07-01 09:43:08 | INFO     | src.core.pipeline | src/core/pipeline.py:526 | 贵州茅台(600519) 趋势分析: 空头排列, 买入信号=持有, 评分=51
+2026-07-01 09:43:08 | INFO     | src.core.pipeline | src/core/pipeline.py:559 | 贵州茅台(600519) 开始多维度情报搜索...
+2026-07-01 09:43:08 | INFO     | src.search_service | src/search_service.py:4059 | 开始多维度情报搜索: 贵州茅台(600519), 时间范围: 近3天 (profile=short, NEWS_MAX_AGE_DAYS=3), 目标条数=3, provider请求条数=6
+2026-07-01 09:43:08 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 最新消息: 使用 SearXNG，请求窗口: 近3天
+2026-07-01 09:43:09 | INFO     | src.search_service | src/search_service.py:1853 | [SearXNG] 已刷新公共实例池，共 20 个候选实例
+2026-07-01 09:43:09 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.rhscz.eu 搜索失败: Too Many Requests
+2026-07-01 09:43:10 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.rhscz.eu 搜索失败: Too Many Requests
+2026-07-01 09:43:10 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.tiekoetter.com 搜索失败: Too Many Requests
+2026-07-01 09:43:10 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 最新消息: 搜索失败 - https://search.rhscz.eu: Too Many Requests；https://searx.rhscz.eu: Too Many Requests；https://searx.tiekoetter.com: Too Many Requests
+2026-07-01 09:43:11 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 机构分析: 使用 SearXNG，请求窗口: 近180天
+2026-07-01 09:43:11 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.rhscz.eu 搜索失败: Too Many Requests
+2026-07-01 09:43:11 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.tiekoetter.com 搜索失败: Too Many Requests
+2026-07-01 09:43:12 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.einfachzocken.eu 搜索失败: Too Many Requests
+2026-07-01 09:43:12 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 机构分析: 搜索失败 - https://searx.rhscz.eu: Too Many Requests；https://searx.tiekoetter.com: Too Many Requests；https://search.einfachzocken.eu: Too Many Requests
+2026-07-01 09:43:12 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 风险排查: 使用 SearXNG，请求窗口: 近3天
+2026-07-01 09:43:13 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.tiekoetter.com 搜索失败: Too Many Requests
+2026-07-01 09:43:13 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.einfachzocken.eu 搜索失败: Too Many Requests
+2026-07-01 09:43:13 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.oloke.xyz 搜索失败: HTTP 500
+2026-07-01 09:43:13 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 风险排查: 搜索失败 - https://searx.tiekoetter.com: Too Many Requests；https://search.einfachzocken.eu: Too Many Requests；https://searx.oloke.xyz: HTTP 500
+2026-07-01 09:43:14 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 公司公告: 使用 SearXNG，请求窗口: 近3天
+2026-07-01 09:43:14 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.einfachzocken.eu 搜索失败: Too Many Requests
+2026-07-01 09:43:15 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.oloke.xyz 搜索失败: HTTP 500
+2026-07-01 09:43:15 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.bladerunn.in 搜索失败: Too Many Requests
+2026-07-01 09:43:15 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 公司公告: 搜索失败 - https://search.einfachzocken.eu: Too Many Requests；https://searx.oloke.xyz: HTTP 500；https://search.bladerunn.in: Too Many Requests
+2026-07-01 09:43:16 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 业绩预期: 使用 SearXNG，请求窗口: 近180天
+2026-07-01 09:43:16 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.oloke.xyz 搜索失败: HTTP 500
+2026-07-01 09:43:17 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.bladerunn.in 搜索失败: Too Many Requests
+2026-07-01 09:43:17 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searxng.website 搜索失败: <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access this resource.</p>
+<hr>
+<address>Ap；SearXNG 实例可能未启用 JSON 输出（请检查 settings.yml），或实例/代理拒绝了本次访问
+2026-07-01 09:43:17 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 业绩预期: 搜索失败 - https://searx.oloke.xyz: HTTP 500；https://search.bladerunn.in: Too Many Requests；https://searxng.website: <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access this resource.</p>
+<hr>
+<address>Ap；SearXNG 实例可能未启用 JSON 输出（请检查 settings.yml），或实例/代理拒绝了本次访问
+2026-07-01 09:43:17 | INFO     | src.core.pipeline | src/core/pipeline.py:575 | 贵州茅台(600519) 情报搜索完成: 共 0 条结果
+2026-07-01 09:43:17 | INFO     | src.agent.skills.base | src/agent/skills/base.py:360 | Loaded 15 built-in skills from /home/runner/work/daily_stock_analysis/daily_stock_analysis/strategies
+2026-07-01 09:43:17 | INFO     | src.agent.factory | src/agent/factory.py:236 | [AgentFactory] SkillManager prototype cached (15 skills)
+2026-07-01 09:43:17 | INFO     | src.agent.skills.base | src/agent/skills/base.py:431 | Activated skills: ['bull_trend']
+2026-07-01 09:43:17 | INFO     | src.agent.factory | src/agent/factory.py:280 | [AgentFactory] Activated skills: ['bull_trend']
+2026-07-01 09:43:20 | INFO     | src.analyzer | src/analyzer.py:3417 | ========== AI 分析 贵州茅台(600519) ==========
+2026-07-01 09:43:20 | INFO     | src.analyzer | src/analyzer.py:3418 | [LLM配置] 模型: openai/deepseek-chat
+2026-07-01 09:43:20 | INFO     | src.analyzer | src/analyzer.py:3419 | [LLM配置] Prompt 长度: 3922 字符
+2026-07-01 09:43:20 | INFO     | src.analyzer | src/analyzer.py:3420 | [LLM配置] 是否包含新闻: 是
+2026-07-01 09:43:20 | INFO     | src.analyzer | src/analyzer.py:3427 | [LLM Prompt 预览]
+# 决策仪表盘分析请求
+
+## 📊 股票基础信息
+| 项目 | 数据 |
+|------|------|
+| 股票代码 | **600519** |
+| 股票名称 | **贵州茅台** |
+| 分析日期 | 2026-07-01 |
+
+---
+
+## 市场阶段上下文
+- 当前市场阶段：盘后
+- 市场：cn
+- 市场本地时间：2026-07-01T17:42:38.047874+08:00
+- 最新可复用完整日线日期：2026-07-01
+- 阶段约束：常规交易时段已结束，可以保留完整交易日复盘语义。
+
+## 分析上下文包摘要
+- 标的：600519（贵州茅台）；市场=cn，pack_version=1.0
+- 数据块状态：
+  - 行情: available；source=tencent
+  - 日线: available；source=storage.get_analysis_context
+  - 技术: partial；告警=intraday_realtime_overlay
+  - 筹码: missing；missing_reason=chip_distribution_mis...
+2026-07-01 09:43:20 | INFO     | src.analyzer | src/analyzer.py:3437 | [LLM调用] 开始调用 openai/deepseek-chat...
+2026-07-01 09:44:00 | INFO     | src.analyzer | src/analyzer.py:3472 | [LLM返回] openai/deepseek-chat 响应成功, 耗时 39.27s, 响应长度 5012 字符
+2026-07-01 09:44:00 | INFO     | src.analyzer | src/analyzer.py:3479 | [LLM返回 预览]
+```json
+{
+    "stock_name": "贵州茅台（600519）",
+    "sentiment_score": 45,
+    "trend_prediction": "看空",
+    "operation_advice": "观望",
+    "decision_type": "hold",
+    "confidence_level": "中",
+
+    "dashboard": {
+        "core_conclusion": {
+            "one_sentence": "空头排列未扭转，观望为主，不宜买入。",
+            ...
+2026-07-01 09:44:00 | INFO     | src.analyzer | src/analyzer.py:3536 | [LLM解析] 贵州茅台(600519) 分析完成: 看空, 评分 45
+2026-07-01 09:44:00 | INFO     | src.core.pipeline | src/core/pipeline.py:2817 | [600519] 分析完成: 观望, 评分 45
+2026-07-01 09:44:00 | INFO     | src.core.pipeline | src/core/pipeline.py:2778 | ========== 开始处理 000001 ==========
+2026-07-01 09:44:00 | INFO     | src.core.pipeline | src/core/pipeline.py:343 | 平安银行(000001) 开始从数据源获取数据...
+2026-07-01 09:44:00 | INFO     | data_provider.base | data_provider/base.py:1412 | [数据源尝试 1/6] [EfinanceFetcher] 获取 000001...
+2026-07-01 09:44:00 | INFO     | data_provider.base | data_provider/base.py:483 | [EfinanceFetcher] 开始获取 000001 日线数据: 范围=2026-05-02 ~ 2026-07-01
+2026-07-01 09:44:02 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:419 | [API调用] ef.stock.get_quote_history(stock_codes=000001, beg=20260502, end=20260701, klt=101, fqt=1)
+2026-07-01 09:44:04 | WARNING  | urllib3.connectionpool | /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connectionpool.py:869 | Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'RemoteDisconnected('Remote end closed connection without response')': /api/qt/stock/kline/get?fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6%2Cf7%2Cf8%2Cf9%2Cf10%2Cf11%2Cf12%2Cf13&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf58%2Cf59%2Cf60%2Cf61&beg=20260502&end=20260701&rtntype=6&secid=0.000001&klt=101&fqt=1
+2026-07-01 09:44:06 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:441 | [API返回] Eastmoney 历史K线成功: endpoint=push2his.eastmoney.com/api/qt/stock/kline/get, stock_code=000001, range=20260502~20260701, rows=40, elapsed=3.12s
+2026-07-01 09:44:06 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:446 | [API返回] 列名: ['股票名称', '股票代码', '日期', '开盘', '收盘', '最高', '最低', '成交量', '成交额', '振幅', '涨跌幅', '涨跌额', '换手率']
+2026-07-01 09:44:06 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:448 | [API返回] 日期范围: 2026-05-06 ~ 2026-07-01
+2026-07-01 09:44:06 | INFO     | data_provider.base | data_provider/base.py:511 | [EfinanceFetcher] 000001 获取成功: 范围=2026-05-02 ~ 2026-07-01, rows=40, elapsed=5.85s
+2026-07-01 09:44:06 | INFO     | data_provider.base | data_provider/base.py:1438 | [数据源完成] 000001 使用 [EfinanceFetcher] 获取成功: rows=40, elapsed=5.85s
+2026-07-01 09:44:06 | INFO     | src.storage | src/storage.py:2511 | 保存 000001 数据成功，新增 40 条
+2026-07-01 09:44:06 | INFO     | src.core.pipeline | src/core/pipeline.py:351 | 平安银行(000001) 数据保存成功（来源: EfinanceFetcher，新增 40 条）
+2026-07-01 09:44:06 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1226 | [API调用] 腾讯财经接口获取 000001 实时行情: endpoint=qt.gtimg.cn/q, symbol=sz000001
+2026-07-01 09:44:10 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1333 | [实时行情-腾讯] 000001 平安银行: endpoint=qt.gtimg.cn/q, 价格=10.16, 涨跌=1.09%, 量比=0.8, 换手率=0.47%, elapsed=4.46s
+2026-07-01 09:44:10 | INFO     | data_provider.base | data_provider/base.py:1917 | [实时行情] 000001 成功获取 (来源: tencent)
+2026-07-01 09:44:10 | INFO     | src.core.pipeline | src/core/pipeline.py:432 | 平安银行(000001) 实时行情: 价格=10.16, 量比=0.8, 换手率=0.47% (来源: tencent)
+2026-07-01 09:44:10 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1226 | [API调用] 腾讯财经接口获取 000001 实时行情: endpoint=qt.gtimg.cn/q, symbol=sz000001
+2026-07-01 09:44:16 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1333 | [实时行情-腾讯] 000001 平安银行: endpoint=qt.gtimg.cn/q, 价格=10.16, 涨跌=1.09%, 量比=0.8, 换手率=0.47%, elapsed=6.23s
+2026-07-01 09:44:16 | INFO     | data_provider.base | data_provider/base.py:1917 | [实时行情] 000001 成功获取 (来源: tencent)
+2026-07-01 09:44:20 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:1167 | [API调用] ef.stock.get_belong_board(stock_code=000001) 获取所属板块...
+2026-07-01 09:44:23 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:1176 | [API返回] ef.stock.get_belong_board 成功: 返回 25 个板块, 耗时 2.47s
+2026-07-01 09:44:23 | INFO     | data_provider.base | data_provider/base.py:2338 | [EfinanceFetcher] 获取所属板块成功: 000001, count=25
+2026-07-01 09:44:23 | INFO     | src.core.pipeline | src/core/pipeline.py:526 | 平安银行(000001) 趋势分析: 空头排列, 买入信号=观望, 评分=41
+2026-07-01 09:44:23 | INFO     | src.core.pipeline | src/core/pipeline.py:559 | 平安银行(000001) 开始多维度情报搜索...
+2026-07-01 09:44:23 | INFO     | src.search_service | src/search_service.py:4059 | 开始多维度情报搜索: 平安银行(000001), 时间范围: 近3天 (profile=short, NEWS_MAX_AGE_DAYS=3), 目标条数=3, provider请求条数=6
+2026-07-01 09:44:23 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 最新消息: 使用 SearXNG，请求窗口: 近3天
+2026-07-01 09:44:23 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.bladerunn.in 搜索失败: Too Many Requests
+2026-07-01 09:44:24 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searxng.website 搜索失败: <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access this resource.</p>
+<hr>
+<address>Ap；SearXNG 实例可能未启用 JSON 输出（请检查 settings.yml），或实例/代理拒绝了本次访问
+2026-07-01 09:44:24 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.ctq.ro 搜索失败: <script>document.cookie = "Yogsototh_opens_the_door=1; Path=/;"; window.location.reload();</script>
+2026-07-01 09:44:24 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 最新消息: 搜索失败 - https://search.bladerunn.in: Too Many Requests；https://searxng.website: <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access this resource.</p>
+<hr>
+<address>Ap；SearXNG 实例可能未启用 JSON 输出（请检查 settings.yml），或实例/代理拒绝了本次访问；https://search.ctq.ro: <script>document.cookie = "Yogsototh_opens_the_door=1; Path=/;"; window.location.reload();</script>
+2026-07-01 09:44:25 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 机构分析: 使用 SearXNG，请求窗口: 近180天
+2026-07-01 09:44:25 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searxng.website 搜索失败: <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access this resource.</p>
+<hr>
+<address>Ap；SearXNG 实例可能未启用 JSON 输出（请检查 settings.yml），或实例/代理拒绝了本次访问
+2026-07-01 09:44:25 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.ctq.ro 搜索失败: <script>document.cookie = "Yogsototh_opens_the_door=1; Path=/;"; window.location.reload();</script>
+2026-07-01 09:44:26 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.linxx.net 搜索失败: Too Many Requests
+2026-07-01 09:44:26 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 机构分析: 搜索失败 - https://searxng.website: <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access this resource.</p>
+<hr>
+<address>Ap；SearXNG 实例可能未启用 JSON 输出（请检查 settings.yml），或实例/代理拒绝了本次访问；https://search.ctq.ro: <script>document.cookie = "Yogsototh_opens_the_door=1; Path=/;"; window.location.reload();</script>；https://searx.linxx.net: Too Many Requests
+2026-07-01 09:44:26 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 风险排查: 使用 SearXNG，请求窗口: 近3天
+2026-07-01 09:44:27 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.ctq.ro 搜索失败: <script>document.cookie = "Yogsototh_opens_the_door=1; Path=/;"; window.location.reload();</script>
+2026-07-01 09:44:27 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.linxx.net 搜索失败: Too Many Requests
+2026-07-01 09:44:27 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.ononoki.org 搜索失败: <!doctype html><html lang="en"><head><title>Making sure you&#39;re not a bot!</title><link rel="stylesheet" href="/.within.website/x/xess/xess.min.css?cachebuster=1.25.0"><meta name="viewport" content；SearXNG 实例可能未启用 JSON 输出（请检查 settings.yml），或实例/代理拒绝了本次访问
+2026-07-01 09:44:27 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 风险排查: 搜索失败 - https://search.ctq.ro: <script>document.cookie = "Yogsototh_opens_the_door=1; Path=/;"; window.location.reload();</script>；https://searx.linxx.net: Too Many Requests；https://searx.ononoki.org: <!doctype html><html lang="en"><head><title>Making sure you&#39;re not a bot!</title><link rel="stylesheet" href="/.within.website/x/xess/xess.min.css?cachebuster=1.25.0"><meta name="viewport" content；SearXNG 实例可能未启用 JSON 输出（请检查 settings.yml），或实例/代理拒绝了本次访问
+2026-07-01 09:44:28 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 公司公告: 使用 SearXNG，请求窗口: 近3天
+2026-07-01 09:44:28 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.linxx.net 搜索失败: Too Many Requests
+2026-07-01 09:44:28 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.ononoki.org 搜索失败: <!doctype html><html lang="en"><head><title>Making sure you&#39;re not a bot!</title><link rel="stylesheet" href="/.within.website/x/xess/xess.min.css?cachebuster=1.25.0"><meta name="viewport" content；SearXNG 实例可能未启用 JSON 输出（请检查 settings.yml），或实例/代理拒绝了本次访问
+2026-07-01 09:44:29 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://priv.au 搜索失败: Too Many Requests
+2026-07-01 09:44:29 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 公司公告: 搜索失败 - https://searx.linxx.net: Too Many Requests；https://searx.ononoki.org: <!doctype html><html lang="en"><head><title>Making sure you&#39;re not a bot!</title><link rel="stylesheet" href="/.within.website/x/xess/xess.min.css?cachebuster=1.25.0"><meta name="viewport" content；SearXNG 实例可能未启用 JSON 输出（请检查 settings.yml），或实例/代理拒绝了本次访问；https://priv.au: Too Many Requests
+2026-07-01 09:44:30 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 业绩预期: 使用 SearXNG，请求窗口: 近180天
+2026-07-01 09:44:30 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.ononoki.org 搜索失败: <!doctype html><html lang="en"><head><title>Making sure you&#39;re not a bot!</title><link rel="stylesheet" href="/.within.website/x/xess/xess.min.css?cachebuster=1.25.0"><meta name="viewport" content；SearXNG 实例可能未启用 JSON 输出（请检查 settings.yml），或实例/代理拒绝了本次访问
+2026-07-01 09:44:30 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://priv.au 搜索失败: Too Many Requests
+2026-07-01 09:44:31 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.privacyredirect.com 搜索失败: 响应JSON解析失败
+2026-07-01 09:44:31 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 业绩预期: 搜索失败 - https://searx.ononoki.org: <!doctype html><html lang="en"><head><title>Making sure you&#39;re not a bot!</title><link rel="stylesheet" href="/.within.website/x/xess/xess.min.css?cachebuster=1.25.0"><meta name="viewport" content；SearXNG 实例可能未启用 JSON 输出（请检查 settings.yml），或实例/代理拒绝了本次访问；https://priv.au: Too Many Requests；https://search.privacyredirect.com: 响应JSON解析失败
+2026-07-01 09:44:31 | INFO     | src.core.pipeline | src/core/pipeline.py:575 | 平安银行(000001) 情报搜索完成: 共 0 条结果
+2026-07-01 09:44:34 | INFO     | src.analyzer | src/analyzer.py:3417 | ========== AI 分析 平安银行(000001) ==========
+2026-07-01 09:44:34 | INFO     | src.analyzer | src/analyzer.py:3418 | [LLM配置] 模型: openai/deepseek-chat
+2026-07-01 09:44:34 | INFO     | src.analyzer | src/analyzer.py:3419 | [LLM配置] Prompt 长度: 3876 字符
+2026-07-01 09:44:34 | INFO     | src.analyzer | src/analyzer.py:3420 | [LLM配置] 是否包含新闻: 是
+2026-07-01 09:44:34 | INFO     | src.analyzer | src/analyzer.py:3427 | [LLM Prompt 预览]
+# 决策仪表盘分析请求
+
+## 📊 股票基础信息
+| 项目 | 数据 |
+|------|------|
+| 股票代码 | **000001** |
+| 股票名称 | **平安银行** |
+| 分析日期 | 2026-07-01 |
+
+---
+
+## 市场阶段上下文
+- 当前市场阶段：盘后
+- 市场：cn
+- 市场本地时间：2026-07-01T17:42:38.047874+08:00
+- 最新可复用完整日线日期：2026-07-01
+- 阶段约束：常规交易时段已结束，可以保留完整交易日复盘语义。
+
+## 分析上下文包摘要
+- 标的：000001（平安银行）；市场=cn，pack_version=1.0
+- 数据块状态：
+  - 行情: available；source=tencent
+  - 日线: available；source=storage.get_analysis_context
+  - 技术: partial；告警=intraday_realtime_overlay
+  - 筹码: missing；missing_reason=chip_distribution_mis...
+2026-07-01 09:44:34 | INFO     | src.analyzer | src/analyzer.py:3437 | [LLM调用] 开始调用 openai/deepseek-chat...
+2026-07-01 09:45:00 | INFO     | src.analyzer | src/analyzer.py:3472 | [LLM返回] openai/deepseek-chat 响应成功, 耗时 25.79s, 响应长度 4753 字符
+2026-07-01 09:45:00 | INFO     | src.analyzer | src/analyzer.py:3479 | [LLM返回 预览]
+```json
+{
+    "stock_name": "平安银行（000001）",
+    "sentiment_score": 40,
+    "trend_prediction": "看空",
+    "operation_advice": "观望",
+    "decision_type": "hold",
+    "confidence_level": "中",
+
+    "dashboard": {
+        "core_conclusion": {
+            "one_sentence": "均线空头排列，趋势偏弱，建议观望等待企稳信号。",
+       ...
+2026-07-01 09:45:00 | INFO     | src.analyzer | src/analyzer.py:3536 | [LLM解析] 平安银行(000001) 分析完成: 看空, 评分 40
+2026-07-01 09:45:00 | INFO     | src.core.pipeline | src/core/pipeline.py:2817 | [000001] 分析完成: 观望, 评分 40
+2026-07-01 09:45:00 | INFO     | src.core.pipeline | src/core/pipeline.py:2778 | ========== 开始处理 601318 ==========
+2026-07-01 09:45:00 | INFO     | src.core.pipeline | src/core/pipeline.py:343 | 中国平安(601318) 开始从数据源获取数据...
+2026-07-01 09:45:00 | INFO     | data_provider.base | data_provider/base.py:1412 | [数据源尝试 1/6] [EfinanceFetcher] 获取 601318...
+2026-07-01 09:45:00 | INFO     | data_provider.base | data_provider/base.py:483 | [EfinanceFetcher] 开始获取 601318 日线数据: 范围=2026-05-02 ~ 2026-07-01
+2026-07-01 09:45:02 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:419 | [API调用] ef.stock.get_quote_history(stock_codes=601318, beg=20260502, end=20260701, klt=101, fqt=1)
+2026-07-01 09:45:03 | WARNING  | urllib3.connectionpool | /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connectionpool.py:869 | Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'RemoteDisconnected('Remote end closed connection without response')': /api/qt/stock/kline/get?fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6%2Cf7%2Cf8%2Cf9%2Cf10%2Cf11%2Cf12%2Cf13&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf58%2Cf59%2Cf60%2Cf61&beg=20260502&end=20260701&rtntype=6&secid=1.601318&klt=101&fqt=1
+2026-07-01 09:45:04 | WARNING  | urllib3.connectionpool | /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connectionpool.py:869 | Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'RemoteDisconnected('Remote end closed connection without response')': /api/qt/stock/kline/get?fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6%2Cf7%2Cf8%2Cf9%2Cf10%2Cf11%2Cf12%2Cf13&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf58%2Cf59%2Cf60%2Cf61&beg=20260502&end=20260701&rtntype=6&secid=1.601318&klt=101&fqt=1
+2026-07-01 09:45:05 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:441 | [API返回] Eastmoney 历史K线成功: endpoint=push2his.eastmoney.com/api/qt/stock/kline/get, stock_code=601318, range=20260502~20260701, rows=40, elapsed=3.33s
+2026-07-01 09:45:05 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:446 | [API返回] 列名: ['股票名称', '股票代码', '日期', '开盘', '收盘', '最高', '最低', '成交量', '成交额', '振幅', '涨跌幅', '涨跌额', '换手率']
+2026-07-01 09:45:05 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:448 | [API返回] 日期范围: 2026-05-06 ~ 2026-07-01
+2026-07-01 09:45:05 | INFO     | data_provider.base | data_provider/base.py:511 | [EfinanceFetcher] 601318 获取成功: 范围=2026-05-02 ~ 2026-07-01, rows=40, elapsed=5.06s
+2026-07-01 09:45:05 | INFO     | data_provider.base | data_provider/base.py:1438 | [数据源完成] 601318 使用 [EfinanceFetcher] 获取成功: rows=40, elapsed=5.07s
+2026-07-01 09:45:05 | INFO     | src.storage | src/storage.py:2511 | 保存 601318 数据成功，新增 40 条
+2026-07-01 09:45:05 | INFO     | src.core.pipeline | src/core/pipeline.py:351 | 中国平安(601318) 数据保存成功（来源: EfinanceFetcher，新增 40 条）
+2026-07-01 09:45:05 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1226 | [API调用] 腾讯财经接口获取 601318 实时行情: endpoint=qt.gtimg.cn/q, symbol=sh601318
+2026-07-01 09:45:11 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1333 | [实时行情-腾讯] 601318 中国平安: endpoint=qt.gtimg.cn/q, 价格=49.53, 涨跌=3.75%, 量比=1.2, 换手率=1.3%, elapsed=5.35s
+2026-07-01 09:45:11 | INFO     | data_provider.base | data_provider/base.py:1917 | [实时行情] 601318 成功获取 (来源: tencent)
+2026-07-01 09:45:11 | INFO     | src.core.pipeline | src/core/pipeline.py:432 | 中国平安(601318) 实时行情: 价格=49.53, 量比=1.2, 换手率=1.3% (来源: tencent)
+2026-07-01 09:45:11 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1226 | [API调用] 腾讯财经接口获取 601318 实时行情: endpoint=qt.gtimg.cn/q, symbol=sh601318
+2026-07-01 09:45:16 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1333 | [实时行情-腾讯] 601318 中国平安: endpoint=qt.gtimg.cn/q, 价格=49.53, 涨跌=3.75%, 量比=1.2, 换手率=1.3%, elapsed=5.53s
+2026-07-01 09:45:16 | INFO     | data_provider.base | data_provider/base.py:1917 | [实时行情] 601318 成功获取 (来源: tencent)
+2026-07-01 09:45:21 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:1167 | [API调用] ef.stock.get_belong_board(stock_code=601318) 获取所属板块...
+2026-07-01 09:45:21 | WARNING  | urllib3.connectionpool | /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/urllib3/connectionpool.py:869 | Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'RemoteDisconnected('Remote end closed connection without response')': /api/qt/slist/get?forcect=1&spt=3&fields=f1%2Cf12%2Cf152%2Cf3%2Cf14%2Cf128%2Cf136&pi=0&pz=1000&po=1&fid=f3&fid0=f4003&invt=2&secid=1.601318
+2026-07-01 09:45:22 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:1176 | [API返回] ef.stock.get_belong_board 成功: 返回 32 个板块, 耗时 1.73s
+2026-07-01 09:45:22 | INFO     | data_provider.base | data_provider/base.py:2338 | [EfinanceFetcher] 获取所属板块成功: 601318, count=32
+2026-07-01 09:45:22 | INFO     | src.core.pipeline | src/core/pipeline.py:526 | 中国平安(601318) 趋势分析: 强势空头, 买入信号=观望, 评分=33
+2026-07-01 09:45:22 | INFO     | src.core.pipeline | src/core/pipeline.py:559 | 中国平安(601318) 开始多维度情报搜索...
+2026-07-01 09:45:22 | INFO     | src.search_service | src/search_service.py:4059 | 开始多维度情报搜索: 中国平安(601318), 时间范围: 近3天 (profile=short, NEWS_MAX_AGE_DAYS=3), 目标条数=3, provider请求条数=6
+2026-07-01 09:45:22 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 最新消息: 使用 SearXNG，请求窗口: 近3天
+2026-07-01 09:45:23 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://priv.au 搜索失败: Too Many Requests
+2026-07-01 09:45:24 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.privacyredirect.com 搜索失败: 响应JSON解析失败
+2026-07-01 09:45:24 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://etsi.me 搜索失败: Too Many Requests
+2026-07-01 09:45:24 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 最新消息: 搜索失败 - https://priv.au: Too Many Requests；https://search.privacyredirect.com: 响应JSON解析失败；https://etsi.me: Too Many Requests
+2026-07-01 09:45:24 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 机构分析: 使用 SearXNG，请求窗口: 近180天
+2026-07-01 09:45:25 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.privacyredirect.com 搜索失败: 响应JSON解析失败
+2026-07-01 09:45:25 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://etsi.me 搜索失败: Too Many Requests
+2026-07-01 09:45:25 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.minus27315.dev 搜索失败: Too Many Requests
+2026-07-01 09:45:25 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 机构分析: 搜索失败 - https://search.privacyredirect.com: 响应JSON解析失败；https://etsi.me: Too Many Requests；https://search.minus27315.dev: Too Many Requests
+2026-07-01 09:45:26 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 风险排查: 使用 SearXNG，请求窗口: 近3天
+2026-07-01 09:45:26 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://etsi.me 搜索失败: Too Many Requests
+2026-07-01 09:45:26 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.minus27315.dev 搜索失败: Too Many Requests
+2026-07-01 09:45:26 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://copp.gg 搜索失败: Too Many Requests
+2026-07-01 09:45:26 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 风险排查: 搜索失败 - https://etsi.me: Too Many Requests；https://search.minus27315.dev: Too Many Requests；https://copp.gg: Too Many Requests
+2026-07-01 09:45:27 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 公司公告: 使用 SearXNG，请求窗口: 近3天
+2026-07-01 09:45:27 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.minus27315.dev 搜索失败: Too Many Requests
+2026-07-01 09:45:27 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://copp.gg 搜索失败: Too Many Requests
+2026-07-01 09:45:28 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.namejeff.xyz 搜索失败: Too Many Requests
+2026-07-01 09:45:28 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 公司公告: 搜索失败 - https://search.minus27315.dev: Too Many Requests；https://copp.gg: Too Many Requests；https://searx.namejeff.xyz: Too Many Requests
+2026-07-01 09:45:28 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 业绩预期: 使用 SearXNG，请求窗口: 近180天
+2026-07-01 09:45:28 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://copp.gg 搜索失败: Too Many Requests
+2026-07-01 09:45:29 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.namejeff.xyz 搜索失败: Too Many Requests
+2026-07-01 09:45:31 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.mdosch.de 搜索失败: Too Many Requests
+2026-07-01 09:45:31 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 业绩预期: 搜索失败 - https://copp.gg: Too Many Requests；https://searx.namejeff.xyz: Too Many Requests；https://search.mdosch.de: Too Many Requests
+2026-07-01 09:45:31 | INFO     | src.core.pipeline | src/core/pipeline.py:575 | 中国平安(601318) 情报搜索完成: 共 0 条结果
+2026-07-01 09:45:34 | INFO     | src.analyzer | src/analyzer.py:3417 | ========== AI 分析 中国平安(601318) ==========
+2026-07-01 09:45:34 | INFO     | src.analyzer | src/analyzer.py:3418 | [LLM配置] 模型: openai/deepseek-chat
+2026-07-01 09:45:34 | INFO     | src.analyzer | src/analyzer.py:3419 | [LLM配置] Prompt 长度: 3886 字符
+2026-07-01 09:45:34 | INFO     | src.analyzer | src/analyzer.py:3420 | [LLM配置] 是否包含新闻: 是
+2026-07-01 09:45:34 | INFO     | src.analyzer | src/analyzer.py:3427 | [LLM Prompt 预览]
+# 决策仪表盘分析请求
+
+## 📊 股票基础信息
+| 项目 | 数据 |
+|------|------|
+| 股票代码 | **601318** |
+| 股票名称 | **中国平安** |
+| 分析日期 | 2026-07-01 |
+
+---
+
+## 市场阶段上下文
+- 当前市场阶段：盘后
+- 市场：cn
+- 市场本地时间：2026-07-01T17:42:38.047874+08:00
+- 最新可复用完整日线日期：2026-07-01
+- 阶段约束：常规交易时段已结束，可以保留完整交易日复盘语义。
+
+## 分析上下文包摘要
+- 标的：601318（中国平安）；市场=cn，pack_version=1.0
+- 数据块状态：
+  - 行情: available；source=tencent
+  - 日线: available；source=storage.get_analysis_context
+  - 技术: partial；告警=intraday_realtime_overlay
+  - 筹码: missing；missing_reason=chip_distribution_mis...
+2026-07-01 09:45:34 | INFO     | src.analyzer | src/analyzer.py:3437 | [LLM调用] 开始调用 openai/deepseek-chat...
+2026-07-01 09:46:00 | INFO     | src.analyzer | src/analyzer.py:3472 | [LLM返回] openai/deepseek-chat 响应成功, 耗时 26.20s, 响应长度 5125 字符
+2026-07-01 09:46:00 | INFO     | src.analyzer | src/analyzer.py:3479 | [LLM返回 预览]
+```json
+{
+    "stock_name": "中国平安（601318）",
+    "sentiment_score": 33,
+    "trend_prediction": "看空",
+    "operation_advice": "观望",
+    "decision_type": "hold",
+    "confidence_level": "中",
+
+    "dashboard": {
+        "core_conclusion": {
+            "one_sentence": "空头排列未改，今日放量反弹暂作观望，持仓者逢高减仓。",
+    ...
+2026-07-01 09:46:00 | INFO     | src.analyzer | src/analyzer.py:3536 | [LLM解析] 中国平安(601318) 分析完成: 看空, 评分 33
+2026-07-01 09:46:00 | INFO     | src.core.pipeline | src/core/pipeline.py:2817 | [601318] 分析完成: 观望, 评分 33
+2026-07-01 09:46:00 | INFO     | src.core.pipeline | src/core/pipeline.py:2778 | ========== 开始处理 000858 ==========
+2026-07-01 09:46:00 | INFO     | src.core.pipeline | src/core/pipeline.py:343 | 五粮液(000858) 开始从数据源获取数据...
+2026-07-01 09:46:00 | INFO     | data_provider.base | data_provider/base.py:1412 | [数据源尝试 1/6] [EfinanceFetcher] 获取 000858...
+2026-07-01 09:46:00 | INFO     | data_provider.base | data_provider/base.py:483 | [EfinanceFetcher] 开始获取 000858 日线数据: 范围=2026-05-02 ~ 2026-07-01
+2026-07-01 09:46:03 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:419 | [API调用] ef.stock.get_quote_history(stock_codes=000858, beg=20260502, end=20260701, klt=101, fqt=1)
+2026-07-01 09:46:06 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:441 | [API返回] Eastmoney 历史K线成功: endpoint=push2his.eastmoney.com/api/qt/stock/kline/get, stock_code=000858, range=20260502~20260701, rows=40, elapsed=2.63s
+2026-07-01 09:46:06 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:446 | [API返回] 列名: ['股票名称', '股票代码', '日期', '开盘', '收盘', '最高', '最低', '成交量', '成交额', '振幅', '涨跌幅', '涨跌额', '换手率']
+2026-07-01 09:46:06 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:448 | [API返回] 日期范围: 2026-05-06 ~ 2026-07-01
+2026-07-01 09:46:06 | INFO     | data_provider.base | data_provider/base.py:511 | [EfinanceFetcher] 000858 获取成功: 范围=2026-05-02 ~ 2026-07-01, rows=40, elapsed=5.34s
+2026-07-01 09:46:06 | INFO     | data_provider.base | data_provider/base.py:1438 | [数据源完成] 000858 使用 [EfinanceFetcher] 获取成功: rows=40, elapsed=5.34s
+2026-07-01 09:46:06 | INFO     | src.storage | src/storage.py:2511 | 保存 000858 数据成功，新增 40 条
+2026-07-01 09:46:06 | INFO     | src.core.pipeline | src/core/pipeline.py:351 | 五粮液(000858) 数据保存成功（来源: EfinanceFetcher，新增 40 条）
+2026-07-01 09:46:06 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1226 | [API调用] 腾讯财经接口获取 000858 实时行情: endpoint=qt.gtimg.cn/q, symbol=sz000858
+2026-07-01 09:46:09 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1333 | [实时行情-腾讯] 000858 五 粮 液: endpoint=qt.gtimg.cn/q, 价格=74.52, 涨跌=0.7%, 量比=1.0, 换手率=0.98%, elapsed=3.23s
+2026-07-01 09:46:09 | INFO     | data_provider.base | data_provider/base.py:1917 | [实时行情] 000858 成功获取 (来源: tencent)
+2026-07-01 09:46:09 | INFO     | src.core.pipeline | src/core/pipeline.py:432 | 五 粮 液(000858) 实时行情: 价格=74.52, 量比=1.0, 换手率=0.98% (来源: tencent)
+2026-07-01 09:46:09 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1226 | [API调用] 腾讯财经接口获取 000858 实时行情: endpoint=qt.gtimg.cn/q, symbol=sz000858
+2026-07-01 09:46:15 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1333 | [实时行情-腾讯] 000858 五 粮 液: endpoint=qt.gtimg.cn/q, 价格=74.52, 涨跌=0.7%, 量比=1.0, 换手率=0.98%, elapsed=6.49s
+2026-07-01 09:46:15 | INFO     | data_provider.base | data_provider/base.py:1917 | [实时行情] 000858 成功获取 (来源: tencent)
+2026-07-01 09:46:19 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:1167 | [API调用] ef.stock.get_belong_board(stock_code=000858) 获取所属板块...
+2026-07-01 09:46:20 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:1176 | [API返回] ef.stock.get_belong_board 成功: 返回 29 个板块, 耗时 0.73s
+2026-07-01 09:46:20 | INFO     | data_provider.base | data_provider/base.py:2338 | [EfinanceFetcher] 获取所属板块成功: 000858, count=29
+2026-07-01 09:46:20 | INFO     | src.core.pipeline | src/core/pipeline.py:526 | 五 粮 液(000858) 趋势分析: 空头排列, 买入信号=持有, 评分=54
+2026-07-01 09:46:20 | INFO     | src.core.pipeline | src/core/pipeline.py:559 | 五 粮 液(000858) 开始多维度情报搜索...
+2026-07-01 09:46:20 | INFO     | src.search_service | src/search_service.py:4059 | 开始多维度情报搜索: 五 粮 液(000858), 时间范围: 近3天 (profile=short, NEWS_MAX_AGE_DAYS=3), 目标条数=3, provider请求条数=6
+2026-07-01 09:46:20 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 最新消息: 使用 SearXNG，请求窗口: 近3天
+2026-07-01 09:46:20 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.namejeff.xyz 搜索失败: Too Many Requests
+2026-07-01 09:46:20 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.mdosch.de 搜索失败: Too Many Requests
+2026-07-01 09:46:21 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.dresden.network 搜索失败: Too Many Requests
+2026-07-01 09:46:21 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 最新消息: 搜索失败 - https://searx.namejeff.xyz: Too Many Requests；https://search.mdosch.de: Too Many Requests；https://searx.dresden.network: Too Many Requests
+2026-07-01 09:46:21 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 机构分析: 使用 SearXNG，请求窗口: 近180天
+2026-07-01 09:46:22 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.mdosch.de 搜索失败: Too Many Requests
+2026-07-01 09:46:22 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.dresden.network 搜索失败: Too Many Requests
+2026-07-01 09:46:22 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.im-in.space 搜索失败: Too Many Requests
+2026-07-01 09:46:22 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 机构分析: 搜索失败 - https://search.mdosch.de: Too Many Requests；https://searx.dresden.network: Too Many Requests；https://search.im-in.space: Too Many Requests
+2026-07-01 09:46:23 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 风险排查: 使用 SearXNG，请求窗口: 近3天
+2026-07-01 09:46:23 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.dresden.network 搜索失败: Too Many Requests
+2026-07-01 09:46:24 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.im-in.space 搜索失败: Too Many Requests
+2026-07-01 09:46:24 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://ooglester.com 搜索失败: Too Many Requests
+2026-07-01 09:46:24 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 风险排查: 搜索失败 - https://searx.dresden.network: Too Many Requests；https://search.im-in.space: Too Many Requests；https://ooglester.com: Too Many Requests
+2026-07-01 09:46:24 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 公司公告: 使用 SearXNG，请求窗口: 近3天
+2026-07-01 09:46:25 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.im-in.space 搜索失败: Too Many Requests
+2026-07-01 09:46:25 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://ooglester.com 搜索失败: Too Many Requests
+2026-07-01 09:46:25 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.rhscz.eu 搜索失败: Too Many Requests
+2026-07-01 09:46:25 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 公司公告: 搜索失败 - https://search.im-in.space: Too Many Requests；https://ooglester.com: Too Many Requests；https://search.rhscz.eu: Too Many Requests
+2026-07-01 09:46:26 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 业绩预期: 使用 SearXNG，请求窗口: 近180天
+2026-07-01 09:46:26 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://ooglester.com 搜索失败: Too Many Requests
+2026-07-01 09:46:26 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.rhscz.eu 搜索失败: Too Many Requests
+2026-07-01 09:46:27 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.rhscz.eu 搜索失败: Too Many Requests
+2026-07-01 09:46:27 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 业绩预期: 搜索失败 - https://ooglester.com: Too Many Requests；https://search.rhscz.eu: Too Many Requests；https://searx.rhscz.eu: Too Many Requests
+2026-07-01 09:46:27 | INFO     | src.core.pipeline | src/core/pipeline.py:575 | 五 粮 液(000858) 情报搜索完成: 共 0 条结果
+2026-07-01 09:46:30 | INFO     | src.analyzer | src/analyzer.py:3417 | ========== AI 分析 五 粮 液(000858) ==========
+2026-07-01 09:46:30 | INFO     | src.analyzer | src/analyzer.py:3418 | [LLM配置] 模型: openai/deepseek-chat
+2026-07-01 09:46:30 | INFO     | src.analyzer | src/analyzer.py:3419 | [LLM配置] Prompt 长度: 3918 字符
+2026-07-01 09:46:30 | INFO     | src.analyzer | src/analyzer.py:3420 | [LLM配置] 是否包含新闻: 是
+2026-07-01 09:46:30 | INFO     | src.analyzer | src/analyzer.py:3427 | [LLM Prompt 预览]
+# 决策仪表盘分析请求
+
+## 📊 股票基础信息
+| 项目 | 数据 |
+|------|------|
+| 股票代码 | **000858** |
+| 股票名称 | **五 粮 液** |
+| 分析日期 | 2026-07-01 |
+
+---
+
+## 市场阶段上下文
+- 当前市场阶段：盘后
+- 市场：cn
+- 市场本地时间：2026-07-01T17:42:38.047874+08:00
+- 最新可复用完整日线日期：2026-07-01
+- 阶段约束：常规交易时段已结束，可以保留完整交易日复盘语义。
+
+## 分析上下文包摘要
+- 标的：000858（五 粮 液）；市场=cn，pack_version=1.0
+- 数据块状态：
+  - 行情: available；source=tencent
+  - 日线: available；source=storage.get_analysis_context
+  - 技术: partial；告警=intraday_realtime_overlay
+  - 筹码: missing；missing_reason=chip_distribution_m...
+2026-07-01 09:46:30 | INFO     | src.analyzer | src/analyzer.py:3437 | [LLM调用] 开始调用 openai/deepseek-chat...
+2026-07-01 09:46:51 | INFO     | src.analyzer | src/analyzer.py:3472 | [LLM返回] openai/deepseek-chat 响应成功, 耗时 20.85s, 响应长度 5159 字符
+2026-07-01 09:46:51 | INFO     | src.analyzer | src/analyzer.py:3479 | [LLM返回 预览]
+```json
+{
+    "stock_name": "五粮液（000858）",
+    "sentiment_score": 54,
+    "trend_prediction": "看空",
+    "operation_advice": "持有",
+    "decision_type": "hold",
+    "confidence_level": "中",
+
+    "dashboard": {
+        "core_conclusion": {
+            "one_sentence": "空头排列下乖离率安全，量能异常，建议持仓观望。",
+        ...
+2026-07-01 09:46:51 | INFO     | src.analyzer | src/analyzer.py:3536 | [LLM解析] 五 粮 液(000858) 分析完成: 看空, 评分 54
+2026-07-01 09:46:51 | INFO     | src.core.pipeline | src/core/pipeline.py:2817 | [000858] 分析完成: 持有, 评分 54
+2026-07-01 09:46:51 | INFO     | src.core.pipeline | src/core/pipeline.py:2778 | ========== 开始处理 600036 ==========
+2026-07-01 09:46:51 | INFO     | src.core.pipeline | src/core/pipeline.py:343 | 招商银行(600036) 开始从数据源获取数据...
+2026-07-01 09:46:51 | INFO     | data_provider.base | data_provider/base.py:1412 | [数据源尝试 1/6] [EfinanceFetcher] 获取 600036...
+2026-07-01 09:46:51 | INFO     | data_provider.base | data_provider/base.py:483 | [EfinanceFetcher] 开始获取 600036 日线数据: 范围=2026-05-02 ~ 2026-07-01
+2026-07-01 09:46:53 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:419 | [API调用] ef.stock.get_quote_history(stock_codes=600036, beg=20260502, end=20260701, klt=101, fqt=1)
+2026-07-01 09:46:54 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:441 | [API返回] Eastmoney 历史K线成功: endpoint=push2his.eastmoney.com/api/qt/stock/kline/get, stock_code=600036, range=20260502~20260701, rows=40, elapsed=1.27s
+2026-07-01 09:46:54 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:446 | [API返回] 列名: ['股票名称', '股票代码', '日期', '开盘', '收盘', '最高', '最低', '成交量', '成交额', '振幅', '涨跌幅', '涨跌额', '换手率']
+2026-07-01 09:46:54 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:448 | [API返回] 日期范围: 2026-05-06 ~ 2026-07-01
+2026-07-01 09:46:54 | INFO     | data_provider.base | data_provider/base.py:511 | [EfinanceFetcher] 600036 获取成功: 范围=2026-05-02 ~ 2026-07-01, rows=40, elapsed=3.58s
+2026-07-01 09:46:54 | INFO     | data_provider.base | data_provider/base.py:1438 | [数据源完成] 600036 使用 [EfinanceFetcher] 获取成功: rows=40, elapsed=3.58s
+2026-07-01 09:46:54 | INFO     | src.storage | src/storage.py:2511 | 保存 600036 数据成功，新增 40 条
+2026-07-01 09:46:54 | INFO     | src.core.pipeline | src/core/pipeline.py:351 | 招商银行(600036) 数据保存成功（来源: EfinanceFetcher，新增 40 条）
+2026-07-01 09:46:54 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1226 | [API调用] 腾讯财经接口获取 600036 实时行情: endpoint=qt.gtimg.cn/q, symbol=sh600036
+2026-07-01 09:46:59 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1333 | [实时行情-腾讯] 600036 招商银行: endpoint=qt.gtimg.cn/q, 价格=35.91, 涨跌=1.15%, 量比=0.79, 换手率=0.43%, elapsed=4.34s
+2026-07-01 09:46:59 | INFO     | data_provider.base | data_provider/base.py:1917 | [实时行情] 600036 成功获取 (来源: tencent)
+2026-07-01 09:46:59 | INFO     | src.core.pipeline | src/core/pipeline.py:432 | 招商银行(600036) 实时行情: 价格=35.91, 量比=0.79, 换手率=0.43% (来源: tencent)
+2026-07-01 09:46:59 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1226 | [API调用] 腾讯财经接口获取 600036 实时行情: endpoint=qt.gtimg.cn/q, symbol=sh600036
+2026-07-01 09:47:05 | INFO     | data_provider.akshare_fetcher | data_provider/akshare_fetcher.py:1333 | [实时行情-腾讯] 600036 招商银行: endpoint=qt.gtimg.cn/q, 价格=35.91, 涨跌=1.15%, 量比=0.79, 换手率=0.43%, elapsed=5.71s
+2026-07-01 09:47:05 | INFO     | data_provider.base | data_provider/base.py:1917 | [实时行情] 600036 成功获取 (来源: tencent)
+2026-07-01 09:47:09 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:1167 | [API调用] ef.stock.get_belong_board(stock_code=600036) 获取所属板块...
+2026-07-01 09:47:10 | INFO     | data_provider.efinance_fetcher | data_provider/efinance_fetcher.py:1176 | [API返回] ef.stock.get_belong_board 成功: 返回 24 个板块, 耗时 0.70s
+2026-07-01 09:47:10 | INFO     | data_provider.base | data_provider/base.py:2338 | [EfinanceFetcher] 获取所属板块成功: 600036, count=24
+2026-07-01 09:47:10 | INFO     | src.core.pipeline | src/core/pipeline.py:526 | 招商银行(600036) 趋势分析: 空头排列, 买入信号=观望, 评分=41
+2026-07-01 09:47:10 | INFO     | src.core.pipeline | src/core/pipeline.py:559 | 招商银行(600036) 开始多维度情报搜索...
+2026-07-01 09:47:10 | INFO     | src.search_service | src/search_service.py:4059 | 开始多维度情报搜索: 招商银行(600036), 时间范围: 近3天 (profile=short, NEWS_MAX_AGE_DAYS=3), 目标条数=3, provider请求条数=6
+2026-07-01 09:47:10 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 最新消息: 使用 SearXNG，请求窗口: 近3天
+2026-07-01 09:47:10 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.rhscz.eu 搜索失败: Too Many Requests
+2026-07-01 09:47:10 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.rhscz.eu 搜索失败: Too Many Requests
+2026-07-01 09:47:11 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.tiekoetter.com 搜索失败: Too Many Requests
+2026-07-01 09:47:11 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 最新消息: 搜索失败 - https://search.rhscz.eu: Too Many Requests；https://searx.rhscz.eu: Too Many Requests；https://searx.tiekoetter.com: Too Many Requests
+2026-07-01 09:47:11 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 机构分析: 使用 SearXNG，请求窗口: 近180天
+2026-07-01 09:47:11 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.rhscz.eu 搜索失败: Too Many Requests
+2026-07-01 09:47:12 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.tiekoetter.com 搜索失败: Too Many Requests
+2026-07-01 09:47:12 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.einfachzocken.eu 搜索失败: Too Many Requests
+2026-07-01 09:47:12 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 机构分析: 搜索失败 - https://searx.rhscz.eu: Too Many Requests；https://searx.tiekoetter.com: Too Many Requests；https://search.einfachzocken.eu: Too Many Requests
+2026-07-01 09:47:13 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 风险排查: 使用 SearXNG，请求窗口: 近3天
+2026-07-01 09:47:13 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.tiekoetter.com 搜索失败: Too Many Requests
+2026-07-01 09:47:13 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.einfachzocken.eu 搜索失败: Too Many Requests
+2026-07-01 09:47:14 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.oloke.xyz 搜索失败: HTTP 500
+2026-07-01 09:47:14 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 风险排查: 搜索失败 - https://searx.tiekoetter.com: Too Many Requests；https://search.einfachzocken.eu: Too Many Requests；https://searx.oloke.xyz: HTTP 500
+2026-07-01 09:47:14 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 公司公告: 使用 SearXNG，请求窗口: 近3天
+2026-07-01 09:47:14 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.einfachzocken.eu 搜索失败: Too Many Requests
+2026-07-01 09:47:15 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.oloke.xyz 搜索失败: HTTP 500
+2026-07-01 09:47:15 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.bladerunn.in 搜索失败: Too Many Requests
+2026-07-01 09:47:15 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 公司公告: 搜索失败 - https://search.einfachzocken.eu: Too Many Requests；https://searx.oloke.xyz: HTTP 500；https://search.bladerunn.in: Too Many Requests
+2026-07-01 09:47:16 | INFO     | src.search_service | src/search_service.py:4094 | [情报搜索] 业绩预期: 使用 SearXNG，请求窗口: 近180天
+2026-07-01 09:47:16 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searx.oloke.xyz 搜索失败: HTTP 500
+2026-07-01 09:47:17 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://search.bladerunn.in 搜索失败: Too Many Requests
+2026-07-01 09:47:17 | WARNING  | src.search_service | src/search_service.py:2084 | [SearXNG] 实例 https://searxng.website 搜索失败: <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access this resource.</p>
+<hr>
+<address>Ap；SearXNG 实例可能未启用 JSON 输出（请检查 settings.yml），或实例/代理拒绝了本次访问
+2026-07-01 09:47:17 | WARNING  | src.search_service | src/search_service.py:4161 | [情报搜索] 业绩预期: 搜索失败 - https://searx.oloke.xyz: HTTP 500；https://search.bladerunn.in: Too Many Requests；https://searxng.website: <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>403 Forbidden</title>
+</head><body>
+<h1>Forbidden</h1>
+<p>You don't have permission to access this resource.</p>
+<hr>
+<address>Ap；SearXNG 实例可能未启用 JSON 输出（请检查 settings.yml），或实例/代理拒绝了本次访问
+2026-07-01 09:47:18 | INFO     | src.core.pipeline | src/core/pipeline.py:575 | 招商银行(600036) 情报搜索完成: 共 0 条结果
+2026-07-01 09:47:21 | INFO     | src.analyzer | src/analyzer.py:3417 | ========== AI 分析 招商银行(600036) ==========
+2026-07-01 09:47:21 | INFO     | src.analyzer | src/analyzer.py:3418 | [LLM配置] 模型: openai/deepseek-chat
+2026-07-01 09:47:21 | INFO     | src.analyzer | src/analyzer.py:3419 | [LLM配置] Prompt 长度: 3905 字符
+2026-07-01 09:47:21 | INFO     | src.analyzer | src/analyzer.py:3420 | [LLM配置] 是否包含新闻: 是
+2026-07-01 09:47:21 | INFO     | src.analyzer | src/analyzer.py:3427 | [LLM Prompt 预览]
+# 决策仪表盘分析请求
+
+## 📊 股票基础信息
+| 项目 | 数据 |
+|------|------|
+| 股票代码 | **600036** |
+| 股票名称 | **招商银行** |
+| 分析日期 | 2026-07-01 |
+
+---
+
+## 市场阶段上下文
+- 当前市场阶段：盘后
+- 市场：cn
+- 市场本地时间：2026-07-01T17:42:38.047874+08:00
+- 最新可复用完整日线日期：2026-07-01
+- 阶段约束：常规交易时段已结束，可以保留完整交易日复盘语义。
+
+## 分析上下文包摘要
+- 标的：600036（招商银行）；市场=cn，pack_version=1.0
+- 数据块状态：
+  - 行情: available；source=tencent
+  - 日线: available；source=storage.get_analysis_context
+  - 技术: partial；告警=intraday_realtime_overlay
+  - 筹码: missing；missing_reason=chip_distribution_mis...
+2026-07-01 09:47:21 | INFO     | src.analyzer | src/analyzer.py:3437 | [LLM调用] 开始调用 openai/deepseek-chat...
+2026-07-01 09:47:40 | INFO     | src.analyzer | src/analyzer.py:3472 | [LLM返回] openai/deepseek-chat 响应成功, 耗时 19.02s, 响应长度 5034 字符
+2026-07-01 09:47:40 | INFO     | src.analyzer | src/analyzer.py:3479 | [LLM返回 预览]
+```json
+{
+    "stock_name": "招商银行（600036）",
+    "sentiment_score": 41,
+    "trend_prediction": "看空",
+    "operation_advice": "观望",
+    "decision_type": "hold",
+    "confidence_level": "中",
+    "dashboard": {
+        "core_conclusion": {
+            "one_sentence": "空头排列未改，乖离率虽低但趋势向下，建议观望",
+         ...
+2026-07-01 09:47:40 | INFO     | src.analyzer | src/analyzer.py:3536 | [LLM解析] 招商银行(600036) 分析完成: 看空, 评分 41
+2026-07-01 09:47:40 | INFO     | src.core.pipeline | src/core/pipeline.py:2817 | [600036] 分析完成: 观望, 评分 41
+2026-07-01 09:47:40 | INFO     | src.core.pipeline | src/core/pipeline.py:3000 | ===== 分析完成 =====
+2026-07-01 09:47:40 | INFO     | src.core.pipeline | src/core/pipeline.py:3001 | 成功: 5, 失败: 0, 耗时: 301.91 秒
+2026-07-01 09:47:40 | INFO     | src.notification | src/notification.py:2637 | 日报已保存到: /home/runner/work/daily_stock_analysis/daily_stock_analysis/reports/report_20260701.md
+2026-07-01 09:47:40 | INFO     | src.core.pipeline | src/core/pipeline.py:3126 | 决策仪表盘日报已保存: /home/runner/work/daily_stock_analysis/daily_stock_analysis/reports/report_20260701.md
+2026-07-01 09:47:40 | INFO     | src.core.pipeline | src/core/pipeline.py:3148 | 生成决策仪表盘日报...
+2026-07-01 09:47:40 | INFO     | src.core.pipeline | src/core/pipeline.py:3629 | 通知渠道未配置，跳过推送
+2026-07-01 09:47:40 | INFO     | __main__ | main.py:910 | 
+===== 分析结果摘要 =====
+2026-07-01 09:47:40 | INFO     | __main__ | main.py:913 | 🟡 五 粮 液(000858): 持有 | 评分 54 | 看空
+2026-07-01 09:47:40 | INFO     | __main__ | main.py:913 | ⚪ 贵州茅台(600519): 观望 | 评分 45 | 看空
+2026-07-01 09:47:40 | INFO     | __main__ | main.py:913 | ⚪ 招商银行(600036): 观望 | 评分 41 | 看空
+2026-07-01 09:47:40 | INFO     | __main__ | main.py:913 | ⚪ 平安银行(000001): 观望 | 评分 40 | 看空
+2026-07-01 09:47:40 | INFO     | __main__ | main.py:913 | ⚪ 中国平安(601318): 观望 | 评分 33 | 看空
+2026-07-01 09:47:40 | INFO     | __main__ | main.py:918 | 
+任务执行完成
+2026-07-01 09:47:40 | INFO     | __main__ | main.py:967 | 开始自动回测...
+2026-07-01 09:47:40 | INFO     | __main__ | main.py:975 | 自动回测完成: processed=0 saved=0 completed=0 insufficient=0 errors=0
+2026-07-01 09:47:40 | INFO     | __main__ | main.py:1510 | 
+程序执行完成
